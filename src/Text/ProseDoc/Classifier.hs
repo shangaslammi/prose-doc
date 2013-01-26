@@ -52,9 +52,22 @@ instance ASTClassifier (S.ModuleHead SrcSpan) where
         Label ModuleHead <$> mconcat [mkTree name, mkTree warning, mkTree exports]
 
 instance ASTClassifier (S.ModulePragma SrcSpan) where
+    mkTree p = case p of
+        S.LanguagePragma l names -> do
+            popPrintablesBefore l
+            Label ModulePragma <$> mkTree names
+        S.OptionsPragma l _ _ -> do
+            popPrintablesBefore l
+            Label ModulePragma <$> popPrintables l
+        S.AnnModulePragma l _ -> do
+            popPrintablesBefore l
+            Label ModulePragma <$> popPrintables l
+
+
 instance ASTClassifier (S.ImportDecl SrcSpan) where
 instance ASTClassifier (S.Decl SrcSpan) where
 instance ASTClassifier (S.ModuleName SrcSpan) where
 instance ASTClassifier (S.WarningText SrcSpan) where
 instance ASTClassifier (S.ExportSpecList SrcSpan) where
+instance ASTClassifier (S.Name SrcSpan) where
 

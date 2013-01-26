@@ -10,6 +10,7 @@ data Classifier
     | ModuleName
     | ValueName
     | ConstrName
+    | Name
     | Keyword
     | Punctuation
     | QuasiQuote
