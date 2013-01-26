@@ -18,7 +18,12 @@ data Classifier
     | Other
     | BlockComment
     | LineComment
+    | ProseComment String
     deriving (Show, Eq, Ord)
+
+type LineNo = Int
+type Column = Int
+type Pos = (LineNo, Column)
 
 type Printable = String
 type Fragment  = (SrcSpan, Classifier)

@@ -15,9 +15,11 @@ instance SourceFragment (Loc Token) where
     toFragment = (loc &&& classifyToken . unLoc)
 
 instance SourceFragment (Comment) where
-    toFragment (Comment block loc _) = (loc, comment) where
+    toFragment (Comment block loc txt) = (loc, comment) where
         comment
-            | block     = BlockComment
+            | block     = case txt of
+                '%':prose -> ProseComment prose
+                _         -> BlockComment
             | otherwise = LineComment
 
 classifyToken :: Token -> Classifier

@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE ViewPatterns #-}
 
 module Text.ProseDoc.Tree.Builder where
@@ -15,8 +16,12 @@ import Language.Haskell.Exts.SrcLoc
 import Text.ProseDoc.Tree
 import Text.ProseDoc.Classifier.Types
 
-newtype TreeBuilder a = TreeBuilder (StateT (String, (Int, Int)) (State [Fragment]) a)
+newtype TreeBuilder a = TreeBuilder (StateT (String, Pos) (State [Fragment]) a)
     deriving (Functor, Applicative, Monad)
+
+instance Monoid (TreeBuilder (Tree Classifier Printable)) where
+    mempty      = return mempty
+    mappend a b = liftM2 mappend a b
 
 {-%
 Given a `TreeBuilder`, the origina lsource code and classified fragments, create
@@ -27,12 +32,12 @@ runTreeBuilder (TreeBuilder bldr) src fragments =
     evalState (evalStateT bldr (src,(1,1))) fragments
 
 {-%
-Pop all fragments that are within (or before) the given span.
+Pop all fragments that are within the given position.
 -}
-popFragments :: SrcSpan -> TreeBuilder [Fragment]
-popFragments loc = TreeBuilder $ do
+popFragments :: Pos -> TreeBuilder [Fragment]
+popFragments pos = TreeBuilder $ do
     fragments <- lift get
-    let (include, exclude) = span ((< srcSpanEnd loc).srcSpanStart.fst) fragments
+    let (include, exclude) = span ((< pos).srcSpanStart.fst) fragments
     lift $ put exclude
     return include
 
@@ -42,19 +47,25 @@ Pop fragments from stack and structure them into a tree.
 popPrintables :: SrcSpan -> TreeBuilder (Tree Classifier Printable)
 popPrintables loc | isNullSpan loc = return Empty
 popPrintables loc =
-    mconcat <$> (popFragments loc >>= mapM fragmentToTree)
+    mconcat <$> (popFragments (srcSpanEnd loc) >>= mapM fragmentToTree)
 
+popPrintablesBefore :: SrcSpan -> TreeBuilder (Tree Classifier Printable)
+popPrintablesBefore loc =
+    mconcat <$> (popFragments (srcSpanStart loc) >>= mapM fragmentToTree)
 
 {-%
 Pop source code until the end of given fragment span and structure
 the fragment into a classified tree.
 -}
 fragmentToTree :: Fragment -> TreeBuilder (Tree Classifier Printable)
-fragmentToTree (loc, cls) = Label cls . Leaf <$> splitSpan loc
+fragmentToTree (loc, cls) = beforeToTree loc <> fragment where
+    fragment = Label cls . Leaf <$> splitSpan (srcSpanEnd loc)
 
+beforeToTree :: SrcSpan -> TreeBuilder (Tree Classifier Printable)
+beforeToTree loc = Leaf <$> splitSpan (srcSpanStart loc)
 
-splitSpan :: SrcSpan -> TreeBuilder String
-splitSpan (srcSpanEnd -> (ln', col')) = TreeBuilder $ unwrapWriter go where
+splitSpan :: Pos -> TreeBuilder String
+splitSpan (ln', col') = TreeBuilder $ unwrapWriter go where
     unwrapWriter = fmap ($"") . execWriterT
 
     go = do

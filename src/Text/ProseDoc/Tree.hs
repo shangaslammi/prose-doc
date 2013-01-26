@@ -16,6 +16,7 @@ data Tree l n where
     Label  :: l -> Tree l n -> Tree l n
     Branch :: [Tree l n] -> Tree l n
     Leaf   :: n -> Tree l n
+    deriving (Show)
 
 {-%
 The tree is folded into a monoid depth-first using an abstract function that
