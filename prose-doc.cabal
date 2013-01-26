@@ -15,7 +15,12 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  exposed-modules:     Text.ProseDoc
+  exposed-modules:  Text.ProseDoc
+    , Text.ProseDoc.Tree
+    , Text.ProseDoc.Classifier
+    , Text.ProseDoc.Classifier.Types
+    , Text.ProseDoc.Classifier.Tokens
+
   hs-source-dirs: src
   -- other-modules:
   build-depends: base ==4.5.*
@@ -26,6 +31,7 @@ library
     , blaze-html ==0.4.*
     , pandoc ==1.9.*
     , haskell-src-exts ==1.13.*
+    , ghc-prim
 
 executable prose-doc
   main-is: Main.hs
