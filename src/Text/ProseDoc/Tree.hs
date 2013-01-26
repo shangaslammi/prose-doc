@@ -47,8 +47,8 @@ A tree can be split into parts based a label test. The split off parts will
 contain the same labels when walking the tree spine as the part they were cut
 off from.
 -}
-splitTree :: (l -> Bool) -> Tree l n -> (Tree l n, Maybe (Tree l n), Tree l n)
-splitTree test = go where
+breakTree :: (l -> Bool) -> Tree l n -> (Tree l n, Maybe (Tree l n), Tree l n)
+breakTree test = go where
     go t = case t of
         Empty -> (Empty, Nothing, Empty)
         Label l t'
@@ -72,6 +72,16 @@ splitTree test = go where
         where
             (l, sep, r) = go b
             (b', sep', bs') = gob bs
+
+{-%
+Version of `breakTree` which splits the tree into a list of tree sections.
+-}
+splitTree :: (l -> Bool) -> Tree l n -> [(Maybe (Tree l n), Tree l n)]
+splitTree test = go Nothing where
+    go Nothing Empty = []
+    go sep Empty     = (sep, Empty) : []
+    go sep t = (sep, l) : go sep' r where
+        (l, sep', r) = breakTree test t
 
 
 testSplit = splitTree (=='e') t where
