@@ -10,6 +10,7 @@ data Classifier
     | ModuleName
     | ValueName
     | ConstrName
+    | Pragma
     | Name
     | Keyword
     | Punctuation
@@ -30,6 +31,8 @@ type Printable = String
 type Fragment  = (SrcSpan, Classifier)
 
 class SourceFragment f where
-    toFragment :: f -> Fragment
+    toFragments :: f -> [Fragment]
 
-
+isProse :: Classifier -> Bool
+isProse (ProseComment _) = True
+isProse _ = False

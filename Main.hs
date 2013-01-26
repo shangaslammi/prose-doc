@@ -1,4 +1,4 @@
 
 import Text.ProseDoc
 
-main = selfTest
+main = testClassifier

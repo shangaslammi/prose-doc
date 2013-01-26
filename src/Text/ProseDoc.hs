@@ -14,6 +14,7 @@ It can be seen as an alternative way to write literal Haskell code.
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Text.ProseDoc where
 
@@ -22,7 +23,7 @@ import Control.Error
 import Control.Monad.State
 import Data.Monoid ((<>))
 import Data.Text (Text)
-import Data.List (tails, intercalate, sortBy, span)
+import Data.List (tails, intercalate, sortBy, span, sort)
 import Data.List.Split
 import Data.String (fromString)
 import Data.Ord (comparing)
@@ -47,11 +48,51 @@ We use the [`haskell-src-exts`](http://hackage.haskell.org/package/haskell-src-e
 package to lex the Haskell code. This lets us correctly parse and syntax highlight
 almost all the syntactic extensions supported by modern GHC.
 -}
-import Language.Haskell.Exts
+import Language.Haskell.Exts (readExtensions, parseFileContentsWithComments)
 import Language.Haskell.Exts.Lexer
 import Language.Haskell.Exts.Parser
 import Language.Haskell.Exts.Comments
 import Language.Haskell.Exts.SrcLoc
+import qualified Language.Haskell.Exts.Annotated.Syntax as S
+
+import Text.ProseDoc.Tree
+import Text.ProseDoc.Tree.Builder
+import Text.ProseDoc.Classifier
+import Text.ProseDoc.Classifier.Types
+import Text.ProseDoc.Classifier.Tokens
+
+testClassifier :: IO ()
+testClassifier = runScript $ do
+    src <- scriptIO $ readFile "src/Text/ProseDoc.hs"
+    tree <- hoistEither $ lexHaskell' "src/Text/ProseDoc.hs" src
+
+    scriptIO $ print tree
+
+
+lexHaskell' :: FilePath -> String -> Either String (Tree Classifier Printable)
+lexHaskell' path src = case parseResult . parseMode <$> readExtensions src of
+    Nothing   -> Left "unable to parse language extensions"
+    Just (ParseOk r) -> return r
+    Just (ParseFailed loc msg) -> Left msg
+
+    where
+        parseResult mode = do
+            tokens       <- lexTokenStreamWithMode mode src
+            (ast :: S.Module SrcSpan, comments) <- parseWithComments mode src
+
+            let builder   = mkTree ast
+                tree      = runTreeBuilder builder src (sort fragments)
+                fragments
+                    =  concatMap toFragments tokens
+                    ++ concatMap toFragments comments
+
+            return tree
+
+        parseMode exts = defaultParseMode
+            { parseFilename = path
+            , fixities = Just []
+            , extensions = exts
+            }
 
 lexHaskell :: FilePath -> String -> Either String [Loc Token']
 lexHaskell path src = case parseResult of

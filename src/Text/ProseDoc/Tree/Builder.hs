@@ -16,6 +16,8 @@ import Language.Haskell.Exts.SrcLoc
 import Text.ProseDoc.Tree
 import Text.ProseDoc.Classifier.Types
 
+import Debug.Trace
+
 newtype TreeBuilder a = TreeBuilder (StateT (String, Pos) (State [Fragment]) a)
     deriving (Functor, Applicative, Monad)
 
@@ -39,6 +41,7 @@ popFragments pos = TreeBuilder $ do
     fragments <- lift get
     let (include, exclude) = span ((< pos).srcSpanStart.fst) fragments
     lift $ put exclude
+    -- return $ trace (show (pos, include)) $ include
     return include
 
 {-%
@@ -50,8 +53,15 @@ popPrintables loc =
     mconcat <$> (popFragments (srcSpanEnd loc) >>= mapM fragmentToTree)
 
 popPrintablesBefore :: SrcSpan -> TreeBuilder (Tree Classifier Printable)
-popPrintablesBefore loc =
-    mconcat <$> (popFragments (srcSpanStart loc) >>= mapM fragmentToTree)
+popPrintablesBefore loc = {- trace (show loc) $-}
+    (mconcat <$> (popFragments (srcSpanStart loc) >>= mapM fragmentToTree))
+    <> leftOvers
+    where
+        leftOvers = do
+            fragments <- TreeBuilder $ lift get
+            case fragments of
+                []    -> return mempty
+                ((loc',_):_) -> beforeToTree loc'
 
 {-%
 Pop source code until the end of given fragment span and structure
@@ -62,7 +72,11 @@ fragmentToTree (loc, cls) = beforeToTree loc <> fragment where
     fragment = Label cls . Leaf <$> splitSpan (srcSpanEnd loc)
 
 beforeToTree :: SrcSpan -> TreeBuilder (Tree Classifier Printable)
-beforeToTree loc = Leaf <$> splitSpan (srcSpanStart loc)
+beforeToTree loc = do
+    pre <- splitSpan (srcSpanStart loc)
+    case pre of
+        "" -> return mempty
+        _  -> return $ Leaf pre
 
 splitSpan :: Pos -> TreeBuilder String
 splitSpan (ln', col') = TreeBuilder $ unwrapWriter go where

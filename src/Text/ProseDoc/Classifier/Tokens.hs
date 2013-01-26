@@ -1,21 +1,34 @@
 
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Text.ProseDoc.Classifier.Tokens where
 
-import Control.Arrow ((&&&))
-
 import Language.Haskell.Exts.Lexer
+import Language.Haskell.Exts.SrcLoc
 import Language.Haskell.Exts.Parser
 import Language.Haskell.Exts.Comments
 
 import Text.ProseDoc.Classifier.Types
 
 instance SourceFragment (Loc Token) where
-    toFragment = (loc &&& classifyToken . unLoc)
+    toFragments lt
+        | cls == Pragma
+            = (pos `setLen` 3, Punctuation)
+            : (pos `moveCol` 3, Pragma)
+            : []
+        | otherwise     = (pos, cls) : []
+        where
+            pos   = loc lt
+            token = unLoc lt
+            cls   = classifyToken token
+            moveCol src@(SrcSpan {..}) delta = src
+                { srcSpanStartColumn  = srcSpanStartColumn + delta }
+            setLen  src@(SrcSpan {..}) len = src
+                { srcSpanEndColumn = srcSpanStartColumn + len }
 
 instance SourceFragment (Comment) where
-    toFragment (Comment block loc txt) = (loc, comment) where
+    toFragments (Comment block loc txt) = (loc, comment) : [] where
         comment
             | block     = case txt of
                 '%':prose -> ProseComment prose
@@ -26,6 +39,7 @@ classifyToken :: Token -> Classifier
 classifyToken t
     | punctuation t  = Punctuation
     | keyword t      = Keyword
+    | pragma t       = Pragma
     | thQuote t      = THQuote
     | thEscape t     = THEscape
     | thQuasiQuote t = QuasiQuote
@@ -87,7 +101,27 @@ punctuation = flip elem
     , RightArrowTail
     , LeftDblArrowTail
     , RightDblArrowTail
+    , PragmaEnd
     ]
+
+pragma :: Token -> Bool
+pragma t = case t of
+    RULES               -> True
+    INLINE _            -> True
+    INLINE_CONLIKE      -> True
+    SPECIALISE          -> True
+    SPECIALISE_INLINE _ -> True
+    SOURCE              -> True
+    DEPRECATED          -> True
+    WARNING             -> True
+    SCC                 -> True
+    GENERATED           -> True
+    CORE                -> True
+    UNPACK              -> True
+    OPTIONS _           -> True
+    LANGUAGE            -> True
+    ANN                 -> True
+    _                   -> False
 
 keyword :: Token -> Bool
 keyword = flip elem
@@ -133,4 +167,5 @@ keyword = flip elem
     , KW_CPlusPlus
     , KW_DotNet
     , KW_Jvm
-    , KW_Js]
+    , KW_Js
+    ]

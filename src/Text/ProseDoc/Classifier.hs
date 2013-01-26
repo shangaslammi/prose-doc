@@ -42,26 +42,25 @@ instance ASTClassifier a => ASTClassifier (Maybe a) where
     mkTree (Just a) = mkTree a
 
 instance ASTClassifier (S.Module SrcSpan) where
-    mkTree (S.Module l hd pragmas imports decls) = do
-        popPrintablesBefore l
-        mconcat [mkTree hd, mkTree pragmas, mkTree imports, mkTree decls]
+    mkTree (S.Module l hd pragmas imports decls) =
+        mconcat [mkTree pragmas, mkTree hd, mkTree imports, mkTree decls]
 
 instance ASTClassifier (S.ModuleHead SrcSpan) where
-    mkTree (S.ModuleHead l name warning exports) = do
+    mkTree (S.ModuleHead l name warning exports) =
         popPrintablesBefore l
-        Label ModuleHead <$> mconcat [mkTree name, mkTree warning, mkTree exports]
+        <> (Label ModuleHead <$> mconcat [mkTree name, mkTree warning, mkTree exports])
 
 instance ASTClassifier (S.ModulePragma SrcSpan) where
     mkTree p = case p of
-        S.LanguagePragma l names -> do
+        S.LanguagePragma l names ->
             popPrintablesBefore l
-            Label ModulePragma <$> mkTree names
-        S.OptionsPragma l _ _ -> do
+            <> (Label ModulePragma <$> mkTree names)
+        S.OptionsPragma l _ _ ->
             popPrintablesBefore l
-            Label ModulePragma <$> popPrintables l
-        S.AnnModulePragma l _ -> do
+            <> (Label ModulePragma <$> popPrintables l)
+        S.AnnModulePragma l _ ->
             popPrintablesBefore l
-            Label ModulePragma <$> popPrintables l
+            <> (Label ModulePragma <$> popPrintables l)
 
 
 instance ASTClassifier (S.ImportDecl SrcSpan) where
@@ -69,5 +68,13 @@ instance ASTClassifier (S.Decl SrcSpan) where
 instance ASTClassifier (S.ModuleName SrcSpan) where
 instance ASTClassifier (S.WarningText SrcSpan) where
 instance ASTClassifier (S.ExportSpecList SrcSpan) where
+
 instance ASTClassifier (S.Name SrcSpan) where
+    mkTree n = case n of
+        S.Ident l _ ->
+            popPrintablesBefore l
+            <> (Label Name <$> popPrintables l)
+        S.Symbol l _ ->
+            popPrintablesBefore l
+            <> (Label Name <$> popPrintables l)
 
