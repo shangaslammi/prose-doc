@@ -80,12 +80,13 @@ splitSpan (ln', col') = TreeBuilder $ unwrapWriter go where
         (src, (ln, col)) <- lift get
         let (s, tail -> src') = break (=='\n') src
         lift $ put (src',(ln+1, 1))
-        tell (++ (s ++ "\n"))
+        tell (s ++)
+        tell ('\n' :)
 
 
     popChars n = do
         (src, (ln, col)) <- lift get
         let (s, src') = splitAt n src
         put (src', (ln, col+n))
-        tell (++ s)
+        tell (s ++)
 
