@@ -25,6 +25,7 @@ import Text.ProseDoc.Tree
 import Text.ProseDoc.Classifier.Types
 import Text.ProseDoc.Classifier.Tokens
 
+
 {-
 instance SrcInfo l => MkTree Classifier Printable (S.Module l) where
     mkTree (S.Module _ hd pragmas imports decls) =
