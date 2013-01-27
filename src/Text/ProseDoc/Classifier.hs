@@ -18,9 +18,9 @@ directly so that anything I can compile, I can highlight. However, I have to
 admit that the thought of diving into the GHC API absolutely terrifies me (I'll
 get to it some day, I promise!), so settled with the next best thing, namely [`haskell-src-exts`](http://hackage.haskell.org/package/haskell-src-exts).
 
-Now, `haskell-src-exts` supports an admirably large portion of Haskell syntax,
-but token classification for syntax highlighting isn't really one of the
-targeted use-cases for the library.
+Now, `haskell-src-exts` supports an admirably large portion of the
+Haskell syntax, but token classification for syntax highlighting isn't really
+one of the targeted use-cases for the library.
 
 * You get a [`Token`](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html#t:Token)
 stream from the [lexer](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html)
@@ -75,17 +75,11 @@ class ASTClassifier ast where
     mkTree :: ast -> TreeBuilder (Tree Classifier Printable)
     mkTree = const mempty
 
-label :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
-label l a = Label l <$> mkTree a
-
 {-%
-`label'` is a variation of `label` which discards all labels from child trees.
-This is sometimes useful to prevent an element from gettings several redundant
-classifiers.
+As a generic convenience, we define some helper instances so that we can
+process ast elements, tree builders and lists of the aforementionted in a
+consistent manner.
 -}
-label' :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
-label' l a = Label l . pruneLabels <$> mkTree a
-
 instance ASTClassifier (TreeBuilder (Tree Classifier Printable)) where
     mkTree = id
 
@@ -96,14 +90,61 @@ instance ASTClassifier a => ASTClassifier (Maybe a) where
     mkTree Nothing  = mempty
     mkTree (Just a) = mkTree a
 
-instance ASTClassifier (S.Module SrcSpan) where
-    mkTree (S.Module _ hd pragmas imports decls) =
-        mconcat [mkTree pragmas, mkTree hd, mkTree imports, mkTree decls, popRemaining]
+{-%
+The root node of the AST is always the `Module`. By using the generic traversal
+scheme from [`Data.Generics.Schemes`](http://hackage.haskell.org/packages/archive/syb/latest/doc/html/Data-Generics-Schemes.html)
+we can avoid most of the trouble of having to write an instance for every
+single kind of AST node.
 
-instance ASTClassifier (S.ModuleHead SrcSpan) where
-    mkTree (S.ModuleHead l name warning exports) =
-        popPrintablesBefore l
-        <> label ModuleHead [mkTree name, mkTree warning, mkTree exports]
+If there are any source code fragments that were not processed by the generic
+traversal, we append them with `popRemaining`.
+-}
+instance ASTClassifier (S.Module SrcSpan) where
+    mkTree m = mappend
+        <$> everything mappend gTree m
+        <*> popRemaining
+
+{-%
+
+-}
+gTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
+gTree (cast -> Just (c :: S.ModulePragma SrcSpan)) = mkTree c
+gTree (cast -> Just (c :: S.ImportDecl SrcSpan))   = mkTree c
+gTree (cast -> Just (c :: S.Type SrcSpan))         = mkTree c
+gTree (cast -> Just (c :: S.QName SrcSpan))        = mkTree c
+gTree (cast -> Just (c :: S.Name SrcSpan))         = mkTree c
+gTree (cast -> Just c@(S.Con {}))                  = popAst' ConstrName c
+gTree (cast -> Just c@(S.PApp _ qn _))             = popAst' ConstrName qn
+gTree (cast -> Just c@(S.PRec _ qn _))             = popAst' ConstrName qn
+gTree (cast -> Just (c :: S.QOp SrcSpan))          = popAst' InfixOperator c
+gTree (cast -> Just c@(S.String {}))               = popAst' StringLit c
+gTree (cast -> Just c@(S.TypeSig l names typ))
+    =  popPrintablesBefore l
+    <> label Signature (mkTree names <> mkTree typ)
+gTree _ = mempty
+
+popAst :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
+popAst cls ast = popPrintablesBefore l <> label cls (popPrintables l)
+    where l = S.ann ast
+
+popAst' :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
+popAst' cls ast = popPrintablesBefore l <> label' cls (popPrintables l)
+    where l = S.ann ast
+
+{-%
+`label` is an short-hand function for adding a parent classifier to any value
+that is an `ASTClassifier` itself.
+-}
+label :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
+label l a = Label l <$> mkTree a
+
+{-%
+`label'` is a variation of `label` which discards all labels from child trees.
+This is sometimes useful to prevent an element from gettings several redundant
+classifiers.
+-}
+label' :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
+label' l a = Label l . pruneLabels <$> mkTree a
 
 instance ASTClassifier (S.ModulePragma SrcSpan) where
     mkTree p = case p of
@@ -119,7 +160,7 @@ instance ASTClassifier (S.ModulePragma SrcSpan) where
 
 
 instance ASTClassifier (S.ImportDecl SrcSpan) where
-    mkTree (S.ImportDecl{..})
+    mkTree i@(S.ImportDecl{..})
         =  popPrintablesBefore importAnn
         <> label ImportDecl
         (  mkTree importModule
@@ -130,35 +171,9 @@ instance ASTClassifier (S.ImportDecl SrcSpan) where
 instance ASTClassifier (S.ImportSpecList SrcSpan) where
     mkTree d
         = popPrintablesBefore l
-        <> everything mappend genericTree d
+        <> everything mappend gTree d
         where l = S.ann d
 
-
-instance ASTClassifier (S.Decl SrcSpan) where
-    mkTree d = case d of
-        S.TypeSig l names typ
-            -> popPrintablesBefore l
-            <> label Signature (mkTree names <> mkTree typ)
-
-        _ -> popPrintablesBefore l
-            <> everything mappend genericTree d
-        -- _ -> popPrintablesBefore l <> popPrintables l
-        where l = S.ann d
-
-genericTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
-genericTree (cast -> Just (c :: S.Type SrcSpan))  = mkTree c
-genericTree (cast -> Just (c :: S.QName SrcSpan)) = mkTree c
-genericTree (cast -> Just (c :: S.Name SrcSpan))  = mkTree c
-genericTree (cast -> Just c@(S.Con {}))           = genericPop' ConstrName c
-genericTree (cast -> Just c@(S.PApp _ qn _))      = genericPop' ConstrName qn
-genericTree (cast -> Just c@(S.PRec _ qn _))      = genericPop' ConstrName qn
-genericTree (cast -> Just (c :: S.QOp SrcSpan))   = genericPop' InfixOperator c
-genericTree (cast -> Just c@(S.String {}))        = genericPop' StringLit c
-genericTree _ = mempty
-
-genericPop' :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
-genericPop' cls ast = popPrintablesBefore l <> label' cls (popPrintables l)
-    where l = S.ann ast
 
 instance ASTClassifier (S.ModuleName SrcSpan) where
     mkTree (S.ModuleName l' s)
@@ -169,9 +184,6 @@ instance ASTClassifier (S.ModuleName SrcSpan) where
             -- the actual name.
             SrcSpan {..} = l'
             l = l' { srcSpanEndColumn = srcSpanStartColumn + length s }
-
-instance ASTClassifier (S.WarningText SrcSpan) where
-instance ASTClassifier (S.ExportSpecList SrcSpan) where
 
 instance ASTClassifier (S.Name SrcSpan) where
     mkTree n = popPrintablesBefore l <> label Name (popPrintables l)
