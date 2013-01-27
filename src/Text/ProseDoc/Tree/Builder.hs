@@ -8,9 +8,6 @@ import Control.Monad.State
 import Control.Monad.Writer
 import Control.Applicative
 
-import Data.Char
-import Data.Monoid
-
 import Language.Haskell.Exts.SrcLoc
 
 import Text.ProseDoc.Tree
@@ -41,7 +38,7 @@ popFragments pos = TreeBuilder $ do
     fragments <- lift get
     let (include, exclude) = span ((<= pos).srcSpanEnd.fst) fragments
         (include', exclude') = case exclude of
-            (e@(p,_):es) | srcSpanStart p < pos ->
+            (e@(p,_):_) | srcSpanStart p < pos ->
                 let (e',e'') = breakFragment pos e
                 in (include ++ [e'], e'':exclude)
             _ -> (include, exclude)
@@ -125,10 +122,8 @@ splitSpan (ln', col') = TreeBuilder $ unwrapWriter go where
         tell (s ++)
         tell ('\n' :)
 
-
     popChars n = do
         (src, (ln, col)) <- lift get
         let (s, src') = splitAt n src
         put (src', (ln, col+n))
         tell (s ++)
-

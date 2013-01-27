@@ -6,7 +6,6 @@ module Text.ProseDoc.Classifier.Tokens where
 
 import Language.Haskell.Exts.Lexer
 import Language.Haskell.Exts.SrcLoc
-import Language.Haskell.Exts.Parser
 import Language.Haskell.Exts.Comments
 
 import Text.ProseDoc.Classifier.Types
@@ -27,7 +26,7 @@ instance SourceFragment (Loc Token) where
             setLen  src@(SrcSpan {..}) len = src
                 { srcSpanEndColumn = srcSpanStartColumn + len }
 
-instance SourceFragment (Comment) where
+instance SourceFragment Comment where
     toFragments (Comment block loc txt) = (loc', comment) : [] where
         loc' = case txt of
             '%':_ -> loc

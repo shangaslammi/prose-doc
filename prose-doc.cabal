@@ -16,6 +16,8 @@ cabal-version:       >=1.8
 
 library
   exposed-modules:  Text.ProseDoc
+    , Text.ProseDoc.Rendering
+    , Text.ProseDoc.Parser
     , Text.ProseDoc.Tree
     , Text.ProseDoc.Tree.Builder
     , Text.ProseDoc.Classifier
