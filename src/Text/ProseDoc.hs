@@ -5,9 +5,12 @@
 Haskell source file and composes the comments and the associated source
 into a HTML document where the prose and source flow side by side in sync.
 
-It can be seen as an alternative way to write literal Haskell code.
--}
+The concept is blatantly borrowed from the CoffeeScript tool [docco](http://jashkenas.github.com/docco/).
 
+ProseDoc can be seen as an alternative way to write and format literal Haskell
+code. However, the main motivation behind writing ProseDoc was simply that it
+seemed like an interesting project to tinker with.
+-}
 module Text.ProseDoc where
 
 import Control.Applicative ((<$>))
@@ -21,13 +24,6 @@ import System.FilePath  ((</>), takeExtension, makeRelative)
 
 import Text.Pandoc.SelfContained
 
-{-%
-## Lexing Haskell Source Code
-
-We use the [`haskell-src-exts`](http://hackage.haskell.org/package/haskell-src-exts)
-package to lex the Haskell code. This lets us correctly parse and syntax highlight
-almost all the syntactic extensions supported by modern GHC.
--}
 import Text.ProseDoc.Rendering
 import Text.ProseDoc.Parser
 
