@@ -2,6 +2,8 @@
 body
   font-family verdana, helvetica, sans-serif
   background #f0f0f0
+  margin 0
+  padding 0
 
 pre
   margin 0
@@ -23,6 +25,7 @@ table.sections
 td.code
   background #272822
   padding-left 1em
+  padding-right 1em
   width 60%
 
 tr.file-header
@@ -41,6 +44,7 @@ tr.file-header
   margin 0
   padding 1em 1em 0 1em
   font-size 14px
+  background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d8d8e8), to(#f0f0f0))
 
   li
     padding-top 0.2em
@@ -54,16 +58,20 @@ td.prose
   width 40%
 
   padding-right 1em
+  padding-left 1em
   color #202020
 
   h1,h2,h3,h4,h5,h6,p
-    margin-top 0
+    margin-top 0em
 
   h1,h2,h3
     font-family serif
 
-  p
+  p, ul, ol
     font-size 13px
+
+  li
+    padding-bottom 0.5em
 
     //code
     //  font-size 115%
