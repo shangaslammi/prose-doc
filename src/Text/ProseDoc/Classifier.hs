@@ -16,8 +16,6 @@ source, but nothing more.
 
 module Text.ProseDoc.Classifier where
 
-import Prelude hiding (concatMap)
-
 import Control.Applicative
 
 import Data.String ()
@@ -111,13 +109,13 @@ instance ASTClassifier (S.Decl SrcSpan) where
 
 genericTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
 genericTree (cast -> Just (c :: S.QName SrcSpan)) = mkTree c
-genericTree (cast -> Just (c :: S.Name SrcSpan)) = mkTree c
-genericTree (cast -> Just c@(S.Con {})) = genericPop' ConstrName c
-genericTree (cast -> Just c@(S.PApp _ qn _)) = genericPop' ConstrName qn
-genericTree (cast -> Just c@(S.PRec _ qn _)) = genericPop' ConstrName qn
-genericTree (cast -> Just (c :: S.Type SrcSpan)) = mkTree c
-genericTree (cast -> Just (c :: S.QOp SrcSpan)) = genericPop' InfixOperator c
-genericTree (cast -> Just c@(S.String {})) = genericPop' StringLit c
+genericTree (cast -> Just (c :: S.Name SrcSpan))  = mkTree c
+genericTree (cast -> Just c@(S.Con {}))           = genericPop' ConstrName c
+genericTree (cast -> Just c@(S.PApp _ qn _))      = genericPop' ConstrName qn
+genericTree (cast -> Just c@(S.PRec _ qn _))      = genericPop' ConstrName qn
+genericTree (cast -> Just (c :: S.Type SrcSpan))  = mkTree c
+genericTree (cast -> Just (c :: S.QOp SrcSpan))   = genericPop' InfixOperator c
+genericTree (cast -> Just c@(S.String {}))        = genericPop' StringLit c
 genericTree _ = mempty
 
 genericPop' :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
