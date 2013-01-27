@@ -63,6 +63,11 @@ popPrintablesBefore loc = {- trace (show loc) $-}
                 []    -> return mempty
                 ((loc',_):_) -> beforeToTree loc'
 
+popRemaining :: TreeBuilder (Tree Classifier Printable)
+popRemaining = mconcat <$> (popAllFragments >>= mapM fragmentToTree) where
+    popAllFragments = TreeBuilder (lift get <* lift (put []))
+
+
 {-%
 Pop source code until the end of given fragment span and structure
 the fragment into a classified tree.
