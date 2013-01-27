@@ -4,11 +4,12 @@
 module Text.ProseDoc.Rendering where
 
 import Control.Monad.State
+import Control.Applicative ((<$>),(<*>))
 import Control.Arrow ((&&&))
 
 import Data.Monoid
 import Data.String (fromString)
-import Data.List   (isPrefixOf, stripPrefix)
+import Data.List   (isPrefixOf, stripPrefix, intercalate)
 
 import Text.Blaze.Html5 ((!))
 import Text.Blaze.Extra
@@ -41,13 +42,14 @@ htmlTOC = (H.ul !. "toc") . evalState (go []) . idify  where
                     Just r  -> put fps >> go2 prefix (r,anchor)
 
     go2 prefix ((x:xs), anchor) = do
-        let label = H.toHtml (takeBaseName x)
+        let base  = takeBaseName x
+            label = H.toHtml (intercalate "." (prefix ++ [base]))
             link  = H.a ! A.href (fromString ('#' : anchor)) $ label
             tag   = if null xs then link else label
         descend <- case xs of
-            [] -> return mempty
+            [] -> go (prefix ++ [base])
             _  -> go2 (prefix ++ [x]) (xs, anchor)
-        siblings    <- go prefix
+        siblings <- go prefix
         return $ H.li tag <> H.ul descend <> siblings
 
     idify = map (id &&& pathToId)
