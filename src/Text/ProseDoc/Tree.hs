@@ -79,10 +79,12 @@ Version of `breakTree` which splits the tree into a list of tree sections.
 splitTree :: (l -> Bool) -> Tree l n -> [(Maybe (Tree l n), Tree l n)]
 splitTree test = go Nothing where
     go Nothing Empty = []
-    go sep Empty     = (sep, Empty) : []
-    go sep t = (sep, l) : go sep' r where
-        (l, sep', r) = breakTree test t
+    go sep Empty = (sep, Empty) : []
+    go sep t = case (sep, l) of
+        (Nothing, Empty) -> go sep' r
+        _                -> (sep, l) : go sep' r
 
+        where (l, sep', r) = breakTree test t
 
 testSplit = splitTree (=='e') t where
     t = Branch [b1,b2,b3]
