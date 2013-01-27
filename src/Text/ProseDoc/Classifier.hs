@@ -108,12 +108,12 @@ instance ASTClassifier (S.Decl SrcSpan) where
         where l = S.ann d
 
 genericTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
+genericTree (cast -> Just (c :: S.Type SrcSpan))  = mkTree c
 genericTree (cast -> Just (c :: S.QName SrcSpan)) = mkTree c
 genericTree (cast -> Just (c :: S.Name SrcSpan))  = mkTree c
 genericTree (cast -> Just c@(S.Con {}))           = genericPop' ConstrName c
 genericTree (cast -> Just c@(S.PApp _ qn _))      = genericPop' ConstrName qn
 genericTree (cast -> Just c@(S.PRec _ qn _))      = genericPop' ConstrName qn
-genericTree (cast -> Just (c :: S.Type SrcSpan))  = mkTree c
 genericTree (cast -> Just (c :: S.QOp SrcSpan))   = genericPop' InfixOperator c
 genericTree (cast -> Just c@(S.String {}))        = genericPop' StringLit c
 genericTree _ = mempty
@@ -148,7 +148,12 @@ instance ASTClassifier (S.Type SrcSpan) where
         S.TyParen _ a -> mkTree a
         S.TyCon _ (S.Qual _ m n)
             -> mkTree m
-            <> popCustom Other 1 -- Pop the dot in the qualified name separately
+            <> do
+                within <- currentlyWithin l
+                -- Pop the dot in the qualified name separately
+                if within
+                    then popCustom Punctuation 1
+                    else mempty
             <> label' TypeName (mkTree n)
         _ -> label TypeName $ popPrintables l
         where l = S.ann n

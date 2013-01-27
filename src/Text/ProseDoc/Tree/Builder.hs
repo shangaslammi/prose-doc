@@ -87,6 +87,8 @@ popRemaining :: TreeBuilder (Tree Classifier Printable)
 popRemaining = mconcat <$> (popAllFragments >>= mapM fragmentToTree) where
     popAllFragments = TreeBuilder (lift get <* lift (put []))
 
+currentlyWithin :: SrcSpan -> TreeBuilder Bool
+currentlyWithin loc = TreeBuilder $ fmap (< srcSpanEnd loc) $ gets snd
 
 {-%
 Pop source code until the end of given fragment span and structure
