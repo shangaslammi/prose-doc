@@ -10,6 +10,7 @@ source, but nothing more.
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Text.ProseDoc.Classifier where
 
@@ -29,10 +30,25 @@ import Text.ProseDoc.Tree.Builder
 import Text.ProseDoc.Classifier.Types
 import Text.ProseDoc.Classifier.Tokens
 
+import Debug.Trace
+
+label :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
+label l a = Label l <$> mkTree a
+
+{-%
+`label'` is a variation of `label` which discards all labels from child trees.
+This is sometimes useful to prevent an element from gettings several redundant
+classifiers.
+-}
+label' :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
+label' l a = Label l . pruneLabels <$> mkTree a
 
 class ASTClassifier a where
     mkTree :: a -> TreeBuilder (Tree Classifier Printable)
     mkTree = const mempty
+
+instance ASTClassifier (TreeBuilder (Tree Classifier Printable)) where
+    mkTree = id
 
 instance ASTClassifier a => ASTClassifier [a] where
     mkTree = fmap mconcat . mapM mkTree
@@ -48,7 +64,7 @@ instance ASTClassifier (S.Module SrcSpan) where
 instance ASTClassifier (S.ModuleHead SrcSpan) where
     mkTree (S.ModuleHead l name warning exports) =
         popPrintablesBefore l
-        <> (Label ModuleHead <$> mconcat [mkTree name, mkTree warning, mkTree exports])
+        <> label ModuleHead [mkTree name, mkTree warning, mkTree exports]
 
 instance ASTClassifier (S.ModulePragma SrcSpan) where
     mkTree p = case p of
@@ -64,17 +80,50 @@ instance ASTClassifier (S.ModulePragma SrcSpan) where
 
 
 instance ASTClassifier (S.ImportDecl SrcSpan) where
+    mkTree (S.ImportDecl{..})
+        =  popPrintablesBefore importAnn
+        <> mkTree importModule
+        <> mkTree importAs
+
 instance ASTClassifier (S.Decl SrcSpan) where
+    mkTree d = case d of
+        S.TypeSig l names typ
+            -> popPrintablesBefore l
+            <> label Signature (mkTree names <> mkTree typ)
+
+        _ -> popPrintablesBefore l <> popPrintables l
+        where l = S.ann d
+
 instance ASTClassifier (S.ModuleName SrcSpan) where
+    mkTree (S.ModuleName l' s)
+        = popPrintablesBefore l
+        <> label ModuleName (popPrintables l)
+        where
+            -- ModuleName has invalid span length, so recalculate it from
+            -- the actual name.
+            SrcSpan {..} = l'
+            l = l' { srcSpanEndColumn = srcSpanStartColumn + length s }
+
 instance ASTClassifier (S.WarningText SrcSpan) where
 instance ASTClassifier (S.ExportSpecList SrcSpan) where
 
 instance ASTClassifier (S.Name SrcSpan) where
-    mkTree n = case n of
-        S.Ident l _ ->
-            popPrintablesBefore l
-            <> (Label Name <$> popPrintables l)
-        S.Symbol l _ ->
-            popPrintablesBefore l
-            <> (Label Name <$> popPrintables l)
+    mkTree n = popPrintablesBefore l <> label Name (popPrintables l)
+        where l = S.ann n
 
+instance ASTClassifier (S.Type SrcSpan) where
+    mkTree n = popPrintablesBefore l <> case n of
+        S.TyFun _ a b -> mkTree a <> mkTree b
+        S.TyApp _ a b -> mkTree a <> mkTree b
+        S.TyList _ a  -> mkTree a
+        S.TyTuple _ _ a -> mkTree a
+        S.TyParen _ a -> mkTree a
+        S.TyCon _ (S.Qual _ m n) -> mkTree m <> label TypeName (popPrintables l)
+        _ -> label TypeName $ popPrintables l
+        where l = S.ann n
+
+instance ASTClassifier (S.QName SrcSpan) where
+    mkTree n = popPrintablesBefore l <> case n of
+        S.Qual _ m n -> mkTree m <> mkTree n
+        _ -> label Name $ popPrintables l
+        where l = S.ann n

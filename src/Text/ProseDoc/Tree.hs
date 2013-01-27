@@ -42,6 +42,13 @@ instance Monoid (Tree l n) where
     mappend a (Branch b) = Branch (a:b)
     mappend a b = Branch [a,b]
 
+pruneLabels :: Tree l n -> Tree l n
+pruneLabels t = case t of
+    Label _ t' -> t'
+    Branch bs  -> Branch $ map pruneLabels bs
+    t'         -> t'
+
+
 {-%
 A tree can be split into parts based a label test. The split off parts will
 contain the same labels when walking the tree spine as the part they were cut

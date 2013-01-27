@@ -10,6 +10,7 @@ data Classifier
     | ModuleName
     | ValueName
     | ConstrName
+    | TypeName
     | Pragma
     | Name
     | Keyword
@@ -21,6 +22,7 @@ data Classifier
     | BlockComment
     | LineComment
     | ProseComment String
+    | Signature
     deriving (Show, Eq, Ord)
 
 type LineNo = Int

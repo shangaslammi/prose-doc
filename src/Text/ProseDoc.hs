@@ -68,7 +68,7 @@ testClassifier = runScript $ do
     tree <- parseSourceFile "src/Text/ProseDoc.hs"
     let sections = extractSections tree
     -- scriptIO $ print tree
-    scriptIO $ print sections
+    -- scriptIO $ print sections
 
     scriptIO
         $ writeFile "ProseDoc.html"
@@ -133,6 +133,12 @@ treeToHtml = foldTree addSpan H.toHtml where
         Just c  -> H.span !. c $ inner
 
     cssClass Keyword = Just "kw"
+    cssClass Pragma  = Just "kw"
+    cssClass ModulePragma = Just "pragma"
+    cssClass ModuleName = Just "module-name"
+    cssClass Name = Just "name"
+    cssClass Signature = Just "typesig"
+    cssClass TypeName = Just "type-name"
     cssClass _       = Nothing
 
 renderPage :: [Section] -> H.Html
