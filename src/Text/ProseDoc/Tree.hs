@@ -74,7 +74,7 @@ breakTree test = go where
     go t = case t of
         Empty -> (Empty, Nothing, Empty)
         Label l t'
-            | test l    -> (Empty, Just (Label l t'), Empty)
+            | test l    -> (Empty, Just (Label l t'), Empty)
             | otherwise -> (Label l a, sep, b')
             where
                 (a, sep, b) = go t'
@@ -114,11 +114,11 @@ testSplit = splitTree (=='e') t where
     a = Label 'a' (Leaf 1)
     b = Label 'b' (Leaf 2)
     c = Label 'c' (Leaf 3)
-    b2 = Label '2' $ Branch [d,e,f]
+    b2 = Label '2' $ Branch [d,e,f]
     d = Label 'd' (Leaf 4)
     e = Label 'e' (Leaf 5)
     f = Label 'f' (Leaf 6)
-    b3 = Label '3' $ Branch [g,h,i]
+    b3 = Label '3' $ Branch [g,h,i]
     g = Label 'g' (Leaf 7)
     h = Label 'h' (Leaf 8)
     i = Label 'i' (Leaf 9)

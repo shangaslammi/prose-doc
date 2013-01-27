@@ -26,7 +26,7 @@ instance Monoid (TreeBuilder (Tree Classifier Printable)) where
 Given a `TreeBuilder`, the origina lsource code and classified fragments, create
 a tree of classified, printable elements.
 -}
-runTreeBuilder :: TreeBuilder a -> String -> [Fragment] -> a
+runTreeBuilder :: TreeBuilder a -> String -> [Fragment] -> a
 runTreeBuilder (TreeBuilder bldr) src =
     evalState $ evalStateT bldr (src,(1,1))
 
@@ -34,7 +34,7 @@ runTreeBuilder (TreeBuilder bldr) src =
 Pop all fragments that are before the given position.
 -}
 popFragments :: Pos -> TreeBuilder [Fragment]
-popFragments pos = TreeBuilder $ do
+popFragments pos = TreeBuilder $ do
     fragments <- lift get
     let (include, exclude) = span ((<= pos).srcSpanEnd.fst) fragments
         (include', exclude') = case exclude of
@@ -43,7 +43,7 @@ popFragments pos = TreeBuilder $ do
                 in (include ++ [e'], e'':exclude)
             _ -> (include, exclude)
     lift $ put exclude'
-    -- return $ trace (show (pos, include)) $ include
+    -- return $ trace (show (pos, include)) $ include
     return include'
 
 {-%
@@ -53,7 +53,7 @@ source position.
 -}
 popCustom :: Classifier -> Int -> TreeBuilder (Tree Classifier Printable)
 popCustom cls len = do
-    (ln,col) <- TreeBuilder $ gets snd
+    (ln,col) <- TreeBuilder $ gets snd
     fragmentToTree (SrcSpan "" ln col ln (col + len), cls)
 
 {-%
@@ -68,7 +68,7 @@ breakFragment (ln,col) (l, cls) = ((loc, cls), (loc', cls)) where
 Pop fragments from stack and structure them into a tree.
 -}
 popPrintables :: SrcSpan -> TreeBuilder (Tree Classifier Printable)
-popPrintables loc | isNullSpan loc = return Empty
+popPrintables loc | isNullSpan loc = return Empty
 popPrintables loc =
     mconcat <$> (popFragments (srcSpanEnd loc) >>= mapM fragmentToTree)
 
@@ -78,13 +78,13 @@ popPrintablesBefore loc = {- trace (show loc) $-}
     <> leftOvers
     where
         leftOvers = do
-            fragments <- TreeBuilder $ lift get
+            fragments <- TreeBuilder $ lift get
             case fragments of
                 []    -> return mempty
                 ((loc',_):_) -> beforeToTree loc'
 
 popRemaining :: TreeBuilder (Tree Classifier Printable)
-popRemaining = mconcat <$> (popAllFragments >>= mapM fragmentToTree) where
+popRemaining = mconcat <$> (popAllFragments >>= mapM fragmentToTree) where
     popAllFragments = TreeBuilder (lift get <* lift (put []))
 
 currentlyWithin :: SrcSpan -> TreeBuilder Bool
@@ -103,17 +103,17 @@ beforeToTree loc = do
     pre <- splitSpan (srcSpanStart loc)
     case pre of
         "" -> return mempty
-        _  -> return $ Leaf pre
+        _  -> return $ Leaf pre
 
 splitSpan :: Pos -> TreeBuilder String
-splitSpan (ln', col') = TreeBuilder $ unwrapWriter go where
+splitSpan (ln', col') = TreeBuilder $ unwrapWriter go where
     unwrapWriter = fmap ($"") . execWriterT
 
     go = do
         (_, (ln, col)) <- get
         let action
-                | ln < ln'   = popLine >> go
-                | col < col' = popChars (col'-col)
+                | ln < ln'   = popLine >> go
+                | col < col' = popChars (col'-col)
                 | otherwise  = return ()
         action
 

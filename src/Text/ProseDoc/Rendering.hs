@@ -44,29 +44,29 @@ htmlTOC = (H.ul !. "toc") . evalState (go []) . idify  where
     go2 prefix ((x:xs), anchor) = do
         let base  = takeBaseName x
             label = H.toHtml (intercalate "." (prefix ++ [base]))
-            link  = H.a ! A.href (fromString ('#' : anchor)) $ label
+            link  = H.a ! A.href (fromString ('#' : anchor)) $ label
             tag   = if null xs then link else label
         descend <- case xs of
             [] -> go (prefix ++ [base])
             _  -> go2 (prefix ++ [x]) (xs, anchor)
         siblings <- go prefix
-        return $ H.li tag <> H.ul descend <> siblings
+        return $ H.li tag <> H.ul descend <> siblings
 
     idify = map (id &&& pathToId)
 
 moduleToHtml :: (FilePath, Tree Classifier Printable) -> H.Html
 moduleToHtml (fp, t)
-    =  H.tr !. "file-header" $ (H.td anchor <> fileTd )
+    =  H.tr !. "file-header" $ (H.td anchor <> fileTd )
     <> treeToHtml t
     where
-        fileTd = H.td . H.code . H.toHtml $ fp
-        anchor = H.a !# fromString (pathToId fp) $ ""
+        fileTd = H.td . H.code . H.toHtml $ fp
+        anchor = H.a !# fromString (pathToId fp) $ ""
 
 
 pathToId :: FilePath -> String
 pathToId = map replaceChar where
     replaceChar c
-        | c `elem` "./" = '-'
+        | c `elem` "./" = '-'
         | otherwise     = c
 
 extractSections :: Tree Classifier Printable -> [Section]
@@ -85,19 +85,19 @@ sectionToHtml (Section {..}) = H.tr (proseTd <> codeTd) where
 
     codeTd  = H.td !. "code"
         $ H.pre
-        $ H.code !. "haskell"
+        $ H.code !. "haskell"
         $ codeTreeToHtml sectionCode
 
 markdownToHtml :: String -> H.Html
 markdownToHtml
     = writeHtml defaultWriterOptions
-    . readMarkdown defaultParserState
+    . readMarkdown defaultParserState
 
 codeTreeToHtml :: Tree Classifier Printable -> H.Html
 codeTreeToHtml = foldTree addSpan H.toHtml . pruneEmptyBranches where
     addSpan cls inner = case unwords (cssClass cls) of
         "" -> inner
-        c  -> H.span !. fromString c $ inner
+        c  -> H.span !. fromString c $ inner
 
     cssClass Keyword         = ["kw"]
     cssClass Pragma          = ["kw"]
@@ -118,9 +118,9 @@ codeTreeToHtml = foldTree addSpan H.toHtml . pruneEmptyBranches where
     cssClass _               = []
 
 renderPage :: H.Html -> [H.Html] -> String
-renderPage toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
-    docHead = H.head $ css >> H.title "ProseDoc Generated Module Listing"
-    docBody = H.body $ (H.table !. "sections") $ toc <> mconcat mods
+renderPage toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
+    docHead = H.head $ css >> H.title "ProseDoc Generated Module Listing"
+    docBody = H.body $ (H.table !. "sections") $ toc <> mconcat mods
 
     css = H.link
         ! A.rel "stylesheet"

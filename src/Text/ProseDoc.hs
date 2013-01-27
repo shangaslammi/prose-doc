@@ -47,7 +47,7 @@ function from [`pandoc`](http://hackage.haskell.org/package/pandoc)
 is used to embed the style information from an external css file.
 -}
     makeSelfContained (Just "css")
-        $ renderPage mempty
+        $ renderPage mempty
         $ [moduleToHtml (path, t)]
 
 findModules :: FilePath -> IO [FilePath]
@@ -58,7 +58,7 @@ findModules root = do
 For directories, we walk through all subdirectories and gather
 all files with the extension `.hs`.
 -}
-        then return $ if takeExtension root == ".hs" then [root] else []
+        then return $ if takeExtension root == ".hs" then [root] else []
         else fmap concat
             $   mapM findModules
             =<< map (root </>) . filter (not . isPrefixOf ".")
@@ -73,7 +73,7 @@ first.
 -}
     mods <- sort . map (makeRelative path) <$> findModules path
 
-    htmls <- forM mods $ \m -> do
+    htmls <- forM mods $ \m -> do
         t <- runScript $ parseSourceFile (path </> m)
         return $ moduleToHtml (m, t)
 

@@ -4,12 +4,12 @@ module Text.ProseDoc.Classifier.Types where
 import Language.Haskell.Exts.SrcLoc
 
 data Classifier
-    = ModuleHead
-    | ModulePragma
-    | ImportDecl
-    | ModuleName
+    = ModuleHead
+    | ModulePragma
+    | ImportDecl
+    | ModuleName
     | ValueName
-    | ConstrName
+    | ConstrName
     | TypeName
     | Pragma
     | Name
@@ -18,7 +18,7 @@ data Classifier
     | SpecPunctuation
     | Braces
     | QuasiQuote
-    | THQuote
+    | THQuote
     | THEscape
     | Other
     | BlockComment

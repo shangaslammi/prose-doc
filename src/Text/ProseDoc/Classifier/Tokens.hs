@@ -12,7 +12,7 @@ import Text.ProseDoc.Classifier.Types
 
 instance SourceFragment (Loc Token) where
     toFragments lt
-        | cls == Pragma
+        | cls == Pragma
             = (pos `setLen` 3, Punctuation)
             : (pos `moveCol` 3, Pragma)
             : []
@@ -53,7 +53,7 @@ classifyToken t
     | thQuote t             = THQuote
     | thEscape t            = THEscape
     | thQuasiQuote t        = QuasiQuote
-    | otherwise             = Other
+    | otherwise             = Other
 
 thQuote :: Token -> Bool
 thQuote = flip elem
