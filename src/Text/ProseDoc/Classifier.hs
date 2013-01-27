@@ -43,7 +43,7 @@ instance ASTClassifier a => ASTClassifier (Maybe a) where
 
 instance ASTClassifier (S.Module SrcSpan) where
     mkTree (S.Module l hd pragmas imports decls) =
-        mconcat [mkTree pragmas, mkTree hd, mkTree imports, mkTree decls]
+        mconcat [mkTree pragmas, mkTree hd, mkTree imports, mkTree decls, popRemaining]
 
 instance ASTClassifier (S.ModuleHead SrcSpan) where
     mkTree (S.ModuleHead l name warning exports) =
