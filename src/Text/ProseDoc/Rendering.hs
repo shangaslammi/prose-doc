@@ -94,7 +94,7 @@ markdownToHtml
     . readMarkdown defaultParserState
 
 codeTreeToHtml :: Tree Classifier Printable -> H.Html
-codeTreeToHtml = foldTree addSpan H.toHtml where
+codeTreeToHtml = foldTree addSpan H.toHtml . pruneEmptyBranches where
     addSpan cls inner = case unwords (cssClass cls) of
         "" -> inner
         c  -> H.span !. fromString c $ inner

@@ -48,6 +48,22 @@ pruneLabels t = case t of
     Branch bs  -> Branch $ map pruneLabels bs
     t'         -> t'
 
+pruneEmptyBranches :: Tree l n -> Tree l n
+pruneEmptyBranches t = go t where
+    go t = case t of
+        Empty     -> Empty
+        Branch bs -> case filter notEmpty . map go $ bs of
+            []  -> Empty
+            bs' -> Branch bs'
+        Label l t -> case go t of
+            Empty -> Empty
+            t'    -> Label l t'
+        n         -> n
+
+    notEmpty Empty = False
+    notEmpty _     = True
+
+
 {-%
 A tree can be split into parts based a label test. The split off parts will
 contain the same labels when walking the tree spine as the part they were cut
