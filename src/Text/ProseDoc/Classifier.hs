@@ -20,8 +20,7 @@ import Prelude hiding (concatMap)
 
 import Control.Applicative
 
-import Data.String
-import Data.Foldable
+import Data.String ()
 import Data.Monoid
 
 import Data.Data
@@ -34,9 +33,7 @@ import qualified Language.Haskell.Exts.Annotated.Syntax as S
 import Text.ProseDoc.Tree
 import Text.ProseDoc.Tree.Builder
 import Text.ProseDoc.Classifier.Types
-import Text.ProseDoc.Classifier.Tokens
-
-import Debug.Trace
+import Text.ProseDoc.Classifier.Tokens ()
 
 label :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
 label l a = Label l <$> mkTree a
@@ -64,7 +61,7 @@ instance ASTClassifier a => ASTClassifier (Maybe a) where
     mkTree (Just a) = mkTree a
 
 instance ASTClassifier (S.Module SrcSpan) where
-    mkTree (S.Module l hd pragmas imports decls) =
+    mkTree (S.Module _ hd pragmas imports decls) =
         mconcat [mkTree pragmas, mkTree hd, mkTree imports, mkTree decls, popRemaining]
 
 instance ASTClassifier (S.ModuleHead SrcSpan) where

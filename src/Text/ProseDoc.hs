@@ -17,17 +17,13 @@ It can be seen as an alternative way to write literal Haskell code.
 
 module Text.ProseDoc where
 
-import Control.Applicative (Applicative, (<$>))
+import Control.Applicative ((<$>))
 import Control.Error
 import Control.Monad.State
+
 import Data.Monoid ((<>))
-import Data.Text (Text)
-import Data.List (tails, intercalate, sortBy, span, sort)
-import Data.List.Split
+import Data.List (sort)
 import Data.String (fromString)
-import Data.Ord (comparing)
-import Data.Char (isSpace)
-import qualified Data.Text as T
 
 import Text.Blaze.Html5 ((!))
 import Text.Blaze.Extra
@@ -48,10 +44,9 @@ We use the [`haskell-src-exts`](http://hackage.haskell.org/package/haskell-src-e
 package to lex the Haskell code. This lets us correctly parse and syntax highlight
 almost all the syntactic extensions supported by modern GHC.
 -}
-import Language.Haskell.Exts (readExtensions, parseFileContentsWithComments)
+import Language.Haskell.Exts (readExtensions)
 import Language.Haskell.Exts.Lexer
 import Language.Haskell.Exts.Parser
-import Language.Haskell.Exts.Comments
 import Language.Haskell.Exts.SrcLoc
 import Language.Haskell.Exts.Pretty (prettyPrint)
 import qualified Language.Haskell.Exts.Annotated.Syntax as S
@@ -60,7 +55,6 @@ import Text.ProseDoc.Tree
 import Text.ProseDoc.Tree.Builder
 import Text.ProseDoc.Classifier
 import Text.ProseDoc.Classifier.Types
-import Text.ProseDoc.Classifier.Tokens
 
 testClassifier :: IO ()
 testClassifier = runScript $ do
