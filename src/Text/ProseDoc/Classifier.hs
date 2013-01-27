@@ -1,10 +1,38 @@
 {-%
-## Token Classification
+## Forcing a square peg through a round hole
 
-The idea of the token classification is to take an abstract syntax tree
-and turn it into a "presentational syntax tree" which contains all the
-information needed to print out a syntax highlighted version of the original
-source, but nothing more.
+(aka: syntax coloring of Haskell source code using the [`haskell-src-exts`](http://hackage.haskell.org/package/haskell-src-exts)
+package)
+
+There are several good syntax highlighting libraries and tools available, so
+the simplest thing would have been just to use one and be done with it. However,
+none of the syntax highlighters that I could find worked 100% perfectly with
+the plethora of language extensions available for modern GHC (`TemplateHaskell`
+is particularly tricky), so in a bout of perfectionism I decided I'd try and
+make a syntax highlighter that uses a full blown Haskell parser to get
+everything right.
+
+If I really wanted to be sure I'm supporting all the syntax extensions currently
+available, the right thing to do would be to use the [`GHC API`](http://www.haskell.org/ghc/docs/latest/html/libraries/ghc/index.html)
+directly so that anything I can compile, I can highlight. However, I have to
+admit that the thought of diving into the GHC API absolutely terrifies me (I'll
+get to it some day, I promise!), so settled with the next best thing, namely [`haskell-src-exts`](http://hackage.haskell.org/package/haskell-src-exts).
+
+Now, `haskell-src-exts` supports an admirably large portion of Haskell syntax,
+but token classification for syntax highlighting isn't really one of the
+targeted use-cases for the library.
+
+* You get a [`Token`](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html#t:Token)
+stream from the [lexer](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html)
+that contains information such as which words are keywords.
+* You get an AST
+(thankfully, annotated with position meta-data) from the [parser](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Parser.html)
+for figuring out the context, i.e. whether you are inside a type signature
+or a pattern match.
+* And finally, you get [comments](http://hackage.haskell.org/packages/archive/haskell-src-exts/1.13.5/doc/html/Language-Haskell-Exts-Comments.html)
+(again, tagged with position info) as a separate list.
+
+Which gets us to this module: `Classifier`
 -}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
@@ -33,6 +61,20 @@ import Text.ProseDoc.Tree.Builder
 import Text.ProseDoc.Classifier.Types
 import Text.ProseDoc.Classifier.Tokens ()
 
+{-%
+The `ASTClassifier` type class is used to process nodes in the annotated AST
+produced by `haskell-src-ext` and to build a `Tree` (covered later) of what are
+essentially tokens classified (or labeled) according to their context in the
+AST.
+
+The `mkTree` function of the type-class operates in the `TreeBuilder` monad
+(also covered later), which keeps track of the current source position and the
+lists of tokens and comments we haven't yet processed.
+-}
+class ASTClassifier ast where
+    mkTree :: ast -> TreeBuilder (Tree Classifier Printable)
+    mkTree = const mempty
+
 label :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
 label l a = Label l <$> mkTree a
 
@@ -43,10 +85,6 @@ classifiers.
 -}
 label' :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
 label' l a = Label l . pruneLabels <$> mkTree a
-
-class ASTClassifier a where
-    mkTree :: a -> TreeBuilder (Tree Classifier Printable)
-    mkTree = const mempty
 
 instance ASTClassifier (TreeBuilder (Tree Classifier Printable)) where
     mkTree = id
