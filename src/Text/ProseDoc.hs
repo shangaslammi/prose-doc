@@ -103,6 +103,7 @@ buildTree path src = case parseResult . parseMode <$> readExtensions src of
 
         parseMode exts = defaultParseMode
             { parseFilename = path
+            {-% Disabling fixities allows parsing custom operators -}
             , fixities = Just []
             , extensions = exts
             }
@@ -144,6 +145,8 @@ treeToHtml = foldTree addSpan H.toHtml where
     cssClass Punctuation = ["punct"]
     cssClass InfixOperator = ["infix-op"]
     cssClass StringLit = ["lit", "string"]
+    cssClass LineComment = ["comment"]
+    cssClass BlockComment = ["comment"]
     cssClass _       = []
 
 renderPage :: [Section] -> H.Html

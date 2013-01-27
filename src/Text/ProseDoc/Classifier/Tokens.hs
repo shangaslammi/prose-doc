@@ -28,11 +28,20 @@ instance SourceFragment (Loc Token) where
                 { srcSpanEndColumn = srcSpanStartColumn + len }
 
 instance SourceFragment (Comment) where
-    toFragments (Comment block loc txt) = (loc, comment) : [] where
+    toFragments (Comment block loc txt) = (loc', comment) : [] where
+        loc' = case txt of
+            '%':_ -> loc
+                { srcSpanStartColumn = 1
+                , srcSpanEndColumn   = 1
+                , srcSpanEndLine     = srcSpanEndLine + 1
+                }
+            _ -> loc
+
+        SrcSpan {..} = loc
         comment
-            | block     = case txt of
-                '%':prose -> ProseComment prose
-                _         -> BlockComment
+            | block = case txt of
+                '%':prose     -> ProseComment prose
+                _             -> BlockComment
             | otherwise = LineComment
 
 classifyToken :: Token -> Classifier

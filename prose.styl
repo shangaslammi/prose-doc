@@ -1,21 +1,62 @@
 
+pre
+  margin 0
+
+table
+  width 100%
+  border-collapse collapse
+  border-spacing 0
+
+td
+  padding 0
+  margin 0
+
 table.sections
   tr
     vertical-align top
+    width 100%
+
+    &:first-child td
+      padding-top 1em
+
+    &:last-child td
+      padding-bottom 1em
 
 td.code
   background #272822
   padding-left 1em
+  width 60%
 
 td.prose
+  p:first-child
+    width 100%
+    border-bottom 1px dashed #c0c0e0
+
+  width 40%
+
   padding-right 1em
   color #202020
+
+  h1,h2,h3,h4,h5,h6,p
+    margin-top 0
 
   h1,h2,h3
     font-family serif
 
   p
-    font-family helvetica, verdana
+    font-family helvetica, verdana, sans-serif
+
+    code
+      font-size 115%
+
+  a, a:visited, a:active
+    font-weight bold
+    color #105030
+    text-decoration none
+    border-bottom 1px dotted #a0f0c0
+
+    &:hover
+      background #a0f0c0
 
 code.haskell
   color #f8f8f2
@@ -47,3 +88,6 @@ code.haskell
 
   .lit.string
     color #f9d060
+
+  .comment
+    color #808080

@@ -104,16 +104,16 @@ instance ASTClassifier (S.Decl SrcSpan) where
 
 genericTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
 genericTree (cast -> Just (c :: S.QName SrcSpan)) = mkTree c
-genericTree (cast -> Just c@(S.Con {})) = genericPop ConstrName c
-genericTree (cast -> Just c@(S.PApp _ qn _)) = genericPop ConstrName qn
-genericTree (cast -> Just c@(S.PRec _ qn _)) = genericPop ConstrName qn
+genericTree (cast -> Just c@(S.Con {})) = genericPop' ConstrName c
+genericTree (cast -> Just c@(S.PApp _ qn _)) = genericPop' ConstrName qn
+genericTree (cast -> Just c@(S.PRec _ qn _)) = genericPop' ConstrName qn
 genericTree (cast -> Just (c :: S.Type SrcSpan)) = mkTree c
-genericTree (cast -> Just (c :: S.QOp SrcSpan)) = genericPop InfixOperator c
-genericTree (cast -> Just c@(S.String {})) = genericPop StringLit c
+genericTree (cast -> Just (c :: S.QOp SrcSpan)) = genericPop' InfixOperator c
+genericTree (cast -> Just c@(S.String {})) = genericPop' StringLit c
 genericTree _ = mempty
 
-genericPop :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
-genericPop cls ast = popPrintablesBefore l <> label cls (popPrintables l)
+genericPop' :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
+genericPop' cls ast = popPrintablesBefore l <> label' cls (popPrintables l)
     where l = S.ann ast
 
 instance ASTClassifier (S.ModuleName SrcSpan) where

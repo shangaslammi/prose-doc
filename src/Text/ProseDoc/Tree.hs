@@ -48,7 +48,6 @@ pruneLabels t = case t of
     Branch bs  -> Branch $ map pruneLabels bs
     t'         -> t'
 
-
 {-%
 A tree can be split into parts based a label test. The split off parts will
 contain the same labels when walking the tree spine as the part they were cut
