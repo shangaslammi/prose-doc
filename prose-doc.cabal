@@ -32,7 +32,8 @@ library
     , blaze-html ==0.4.*
     , pandoc ==1.9.*
     , haskell-src-exts ==1.13.*
-    , ghc-prim
+    , blaze-html-contrib ==0.2.*
+
 
 executable prose-doc
   main-is: Main.hs
