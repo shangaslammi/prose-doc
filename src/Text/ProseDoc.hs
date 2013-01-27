@@ -10,8 +10,14 @@ It can be seen as an alternative way to write literal Haskell code.
 
 module Text.ProseDoc where
 
-import Control.Monad ((<=<))
+import Control.Applicative ((<$>))
+import Control.Monad       ((<=<), filterM, forM)
 import Control.Error
+
+import Data.List (sort, isPrefixOf)
+
+import System.Directory (getDirectoryContents, doesFileExist, doesDirectoryExist)
+import System.FilePath  ((</>), takeExtension, makeRelative)
 
 import Text.Pandoc.SelfContained
 
@@ -25,16 +31,29 @@ almost all the syntactic extensions supported by modern GHC.
 import Text.ProseDoc.Rendering
 import Text.ProseDoc.Parser
 
-testClassifier :: IO ()
-testClassifier = runScript $ do
-    tree <- parseSourceFile "src/Text/ProseDoc.hs"
-    let sections = extractSections tree
-    -- scriptIO $ print tree
-    -- scriptIO $ print sections
+generatePage :: FilePath -> IO String
+generatePage path = do
+    isFile <- doesFileExist path
 
-    scriptIO
-        $ writeFile "ProseDoc.html"
-        <=< makeSelfContained (Just "css")
-        . renderPage
-        $ sections
+    mods <- sort <$> if isFile
+        then return [path]
+        else map (makeRelative path) <$> findModules path
 
+    htmls <- forM mods $ \m -> do
+        t <- runScript $ parseSourceFile (path </> m)
+        return $ moduleToHtml (m, t)
+
+    let toc = htmlTOC mods
+
+    makeSelfContained (Just "css") $ renderPage toc htmls
+
+
+findModules :: FilePath -> IO [FilePath]
+findModules root = do
+    isFile <- doesFileExist root
+    if isFile
+        then return $ if takeExtension root == ".hs" then [root] else []
+        else fmap concat
+            $   mapM findModules
+            =<< map (root </>) . filter (not . isPrefixOf ".")
+            <$> getDirectoryContents root

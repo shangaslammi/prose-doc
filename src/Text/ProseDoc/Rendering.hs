@@ -8,7 +8,7 @@ import Control.Arrow ((&&&))
 
 import Data.Monoid
 import Data.String (fromString)
-import Data.List   (sort, isPrefixOf, stripPrefix)
+import Data.List   (isPrefixOf, stripPrefix)
 
 import Text.Blaze.Html5 ((!))
 import Text.Blaze.Extra
@@ -27,7 +27,7 @@ import Text.ProseDoc.Classifier.Types
 import System.FilePath
 
 htmlTOC :: [FilePath] -> H.Html
-htmlTOC = (H.ul !. "toc") . evalState (go []) . idify . sort where
+htmlTOC = (H.ul !. "toc") . evalState (go []) . idify  where
 
     go prefix = do
         paths <- get
@@ -68,10 +68,11 @@ pathToId = map replaceChar where
         | otherwise     = c
 
 extractSections :: Tree Classifier Printable -> [Section]
-extractSections = map toSection . splitTree isProse where
+extractSections = (pad:) . (++[pad]) . map toSection . splitTree isProse where
     toSection (sep, tree) = case sep of
         Nothing -> Section "" tree
         Just (Label (ProseComment prose) _) -> Section prose tree
+    pad = Section "" (Leaf "\n")
 
 treeToHtml :: Tree Classifier Printable -> H.Html
 treeToHtml = mapM_ sectionToHtml . extractSections
@@ -114,10 +115,10 @@ codeTreeToHtml = foldTree addSpan H.toHtml where
     cssClass ImportDecl      = ["import"]
     cssClass _               = []
 
-renderPage :: [Section] -> String
-renderPage sections = renderHtml . H.docTypeHtml $ docHead >> docBody where
+renderPage :: H.Html -> [H.Html] -> String
+renderPage toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
     docHead = H.head $ css >> H.title "ProseDoc Generated Module Listing"
-    docBody = H.body $ (H.table !. "sections") $ mapM_ sectionToHtml sections
+    docBody = H.body $ (H.table !. "sections") $ toc <> mconcat mods
 
     css = H.link
         ! A.rel "stylesheet"

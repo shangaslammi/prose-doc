@@ -1,4 +1,5 @@
 
 import Text.ProseDoc
+import System.Environment
 
-main = testClassifier
+main = fmap head getArgs >>= generatePage >>= putStrLn

@@ -37,6 +37,7 @@ library
     , blaze-html-contrib ==0.2.*
     , syb ==0.3.*
     , filepath ==1.3.*
+    , directory ==1.1.*
 
 
 executable prose-doc
