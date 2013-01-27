@@ -1,2 +1,3 @@
 :set -isrc
-:load Text.ProseDoc.Classifier
+:set -package-conf=dist/package.conf.inplace
+
