@@ -88,8 +88,18 @@ instance ASTClassifier (S.ModulePragma SrcSpan) where
 instance ASTClassifier (S.ImportDecl SrcSpan) where
     mkTree (S.ImportDecl{..})
         =  popPrintablesBefore importAnn
-        <> mkTree importModule
+        <> label ImportDecl
+        (  mkTree importModule
         <> mkTree importAs
+        <> mkTree importSpecs
+        )
+
+instance ASTClassifier (S.ImportSpecList SrcSpan) where
+    mkTree d
+        = popPrintablesBefore l
+        <> everything mappend genericTree d
+        where l = S.ann d
+
 
 instance ASTClassifier (S.Decl SrcSpan) where
     mkTree d = case d of
@@ -104,6 +114,7 @@ instance ASTClassifier (S.Decl SrcSpan) where
 
 genericTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
 genericTree (cast -> Just (c :: S.QName SrcSpan)) = mkTree c
+genericTree (cast -> Just (c :: S.Name SrcSpan)) = mkTree c
 genericTree (cast -> Just c@(S.Con {})) = genericPop' ConstrName c
 genericTree (cast -> Just c@(S.PApp _ qn _)) = genericPop' ConstrName qn
 genericTree (cast -> Just c@(S.PRec _ qn _)) = genericPop' ConstrName qn

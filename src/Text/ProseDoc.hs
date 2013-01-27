@@ -129,7 +129,7 @@ markdownToHtml = writeHtml defaultWriterOptions . readMarkdown defaultParserSta
 treeToHtml :: Tree Classifier Printable -> H.Html
 treeToHtml = foldTree addSpan H.toHtml where
     addSpan cls inner = case unwords (cssClass cls) of
-        "" -> H.span inner
+        "" -> inner
         c  -> H.span !. fromString c $ inner
 
     cssClass Keyword = ["kw"]
@@ -147,6 +147,7 @@ treeToHtml = foldTree addSpan H.toHtml where
     cssClass StringLit = ["lit", "string"]
     cssClass LineComment = ["comment"]
     cssClass BlockComment = ["comment"]
+    cssClass ImportDecl = ["import"]
     cssClass _       = []
 
 renderPage :: [Section] -> H.Html
