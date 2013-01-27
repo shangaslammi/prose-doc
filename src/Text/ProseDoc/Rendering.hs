@@ -3,8 +3,12 @@
 
 module Text.ProseDoc.Rendering where
 
-import Data.Monoid ((<>))
+import Control.Monad.State
+import Control.Arrow ((&&&))
+
+import Data.Monoid
 import Data.String (fromString)
+import Data.List   (sort, isPrefixOf, stripPrefix)
 
 import Text.Blaze.Html5 ((!))
 import Text.Blaze.Extra
@@ -20,11 +24,57 @@ import Text.Pandoc.Shared (defaultWriterOptions)
 import Text.ProseDoc.Tree
 import Text.ProseDoc.Classifier.Types
 
+import System.FilePath
+
+htmlTOC :: [FilePath] -> H.Html
+htmlTOC = (H.ul !. "toc") . evalState (go []) . idify . sort where
+
+    go prefix = do
+        paths <- get
+        case paths of
+            []       -> return mempty
+            ((fp,anchor):fps)  ->
+                let parts  = splitDirectories fp
+                    rest   = stripPrefix prefix parts
+                in case rest of
+                    Nothing -> return mempty
+                    Just r  -> put fps >> go2 prefix (r,anchor)
+
+    go2 prefix ((x:xs), anchor) = do
+        let label = H.toHtml (takeBaseName x)
+            link  = H.a ! A.href (fromString ('#' : anchor)) $ label
+            tag   = if null xs then link else label
+        descend <- case xs of
+            [] -> return mempty
+            _  -> go2 (prefix ++ [x]) (xs, anchor)
+        siblings    <- go prefix
+        return $ H.li tag <> H.ul descend <> siblings
+
+    idify = map (id &&& pathToId)
+
+moduleToHtml :: (FilePath, Tree Classifier Printable) -> H.Html
+moduleToHtml (fp, t)
+    =  H.tr !. "file-header" $ (H.td anchor <> fileTd )
+    <> treeToHtml t
+    where
+        fileTd = H.td . H.code . H.toHtml $ fp
+        anchor = H.a !# fromString (pathToId fp) $ ""
+
+
+pathToId :: FilePath -> String
+pathToId = map replaceChar where
+    replaceChar c
+        | c `elem` "./" = '-'
+        | otherwise     = c
+
 extractSections :: Tree Classifier Printable -> [Section]
 extractSections = map toSection . splitTree isProse where
     toSection (sep, tree) = case sep of
         Nothing -> Section "" tree
         Just (Label (ProseComment prose) _) -> Section prose tree
+
+treeToHtml :: Tree Classifier Printable -> H.Html
+treeToHtml = mapM_ sectionToHtml . extractSections
 
 sectionToHtml :: Section -> H.Html
 sectionToHtml (Section {..}) = H.tr (proseTd <> codeTd) where
@@ -33,15 +83,15 @@ sectionToHtml (Section {..}) = H.tr (proseTd <> codeTd) where
     codeTd  = H.td !. "code"
         $ H.pre
         $ H.code !. "haskell"
-        $ treeToHtml sectionCode
+        $ codeTreeToHtml sectionCode
 
 markdownToHtml :: String -> H.Html
 markdownToHtml
     = writeHtml defaultWriterOptions
     . readMarkdown defaultParserState
 
-treeToHtml :: Tree Classifier Printable -> H.Html
-treeToHtml = foldTree addSpan H.toHtml where
+codeTreeToHtml :: Tree Classifier Printable -> H.Html
+codeTreeToHtml = foldTree addSpan H.toHtml where
     addSpan cls inner = case unwords (cssClass cls) of
         "" -> inner
         c  -> H.span !. fromString c $ inner

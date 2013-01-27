@@ -10,7 +10,7 @@ It can be seen as an alternative way to write literal Haskell code.
 
 module Text.ProseDoc where
 
-import Control.Monad       ((<=<))
+import Control.Monad ((<=<))
 import Control.Error
 
 import Text.Pandoc.SelfContained

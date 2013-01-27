@@ -36,6 +36,7 @@ library
     , haskell-src-exts ==1.13.*
     , blaze-html-contrib ==0.2.*
     , syb ==0.3.*
+    , filepath ==1.3.*
 
 
 executable prose-doc
