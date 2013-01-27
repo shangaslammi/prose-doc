@@ -118,7 +118,10 @@ instance ASTClassifier (S.Type SrcSpan) where
         S.TyList _ a  -> mkTree a
         S.TyTuple _ _ a -> mkTree a
         S.TyParen _ a -> mkTree a
-        S.TyCon _ (S.Qual _ m n) -> mkTree m <> label TypeName (popPrintables l)
+        S.TyCon _ (S.Qual _ m n)
+            -> mkTree m
+            <> popCustom Other 1 -- Pop the dot in the qualified name separately
+            <> label' TypeName (mkTree n)
         _ -> label TypeName $ popPrintables l
         where l = S.ann n
 

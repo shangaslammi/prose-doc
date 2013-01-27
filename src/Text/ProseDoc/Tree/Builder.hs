@@ -34,15 +34,38 @@ runTreeBuilder (TreeBuilder bldr) src fragments =
     evalState (evalStateT bldr (src,(1,1))) fragments
 
 {-%
-Pop all fragments that are within the given position.
+Pop all fragments that are before the given position.
 -}
 popFragments :: Pos -> TreeBuilder [Fragment]
 popFragments pos = TreeBuilder $ do
     fragments <- lift get
-    let (include, exclude) = span ((< pos).srcSpanStart.fst) fragments
-    lift $ put exclude
+    let (include, exclude) = span ((<= pos).srcSpanEnd.fst) fragments
+        (include', exclude') = case exclude of
+            (e@(p,_):es) | srcSpanStart p < pos ->
+                let (e',e'') = breakFragment pos e
+                in (include ++ [e'], e'':exclude)
+            _ -> (include, exclude)
+    lift $ put exclude'
     -- return $ trace (show (pos, include)) $ include
-    return include
+    return include'
+
+{-%
+Sometimes we need to manually tweak some fragments. `popCustom` lets us
+pop a custom fragment with given classifier and length from the current
+source position.
+-}
+popCustom :: Classifier -> Int -> TreeBuilder (Tree Classifier Printable)
+popCustom cls len = do
+    (ln,col) <- TreeBuilder $ gets snd
+    fragmentToTree (SrcSpan "" ln col ln (col + len), cls)
+
+{-%
+Break a fragment into two parts at position.
+-}
+breakFragment :: Pos -> Fragment -> (Fragment, Fragment)
+breakFragment (ln,col) (l, cls) = ((loc, cls), (loc', cls)) where
+    loc  = l { srcSpanEndColumn = col, srcSpanEndLine = ln }
+    loc' = l { srcSpanStartColumn = col, srcSpanStartLine = ln }
 
 {-%
 Pop fragments from stack and structure them into a tree.
