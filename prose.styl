@@ -20,17 +20,30 @@ td.prose
 code.haskell
   color #f8f8f2
 
-  .kw
+  .punct
+    color #f8f8f2
+
+  .kw, .syntax, .infix-op, .brace
     color #f92672
 
-  .pragma .name
-    color #26f972
+  .pragma
+    .name
+      color #26f972
+
+    .punct
+      color #f8f8f2
 
   .module-name
-    color #f9d060
+    color #ae81ff
+
+  .constr-name
+    color #ae81ff
 
   .typesig .name
     color #98ce2c
 
   .type-name
     color #62cfe3
+
+  .lit.string
+    color #f9d060

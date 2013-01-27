@@ -33,6 +33,7 @@ library
     , pandoc ==1.9.*
     , haskell-src-exts ==1.13.*
     , blaze-html-contrib ==0.2.*
+    , syb ==0.3.*
 
 
 executable prose-doc

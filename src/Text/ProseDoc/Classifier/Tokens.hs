@@ -37,16 +37,18 @@ instance SourceFragment (Comment) where
 
 classifyToken :: Token -> Classifier
 classifyToken t
-    | punctuation t  = Punctuation
-    | keyword t      = Keyword
-    | pragma t       = Pragma
-    | thQuote t      = THQuote
-    | thEscape t     = THEscape
-    | thQuasiQuote t = QuasiQuote
-    | otherwise      = Other
+    | braces t              = Braces
+    | specialPunctuation t  = SpecPunctuation
+    | punctuation t         = Punctuation
+    | keyword t             = Keyword
+    | pragma t              = Pragma
+    | thQuote t             = THQuote
+    | thEscape t            = THEscape
+    | thQuasiQuote t        = QuasiQuote
+    | otherwise             = Other
 
 thQuote :: Token -> Bool
-thQuote t = elem t
+thQuote = flip elem
     [ THExpQuote
     , THPatQuote
     , THDecQuote
@@ -65,25 +67,24 @@ thQuasiQuote :: Token -> Bool
 thQuasiQuote (THQuasiQuote _) = True
 thQuasiQuote _ = False
 
-punctuation :: Token -> Bool
-punctuation = flip elem
+braces :: Token -> Bool
+braces = flip elem
     [ LeftParen
     , RightParen
     , LeftHashParen
     , RightHashParen
     , LeftCurlyBar
     , RightCurlyBar
-    , SemiColon
     , LeftCurly
     , RightCurly
     , VRightCurly
     , LeftSquare
     , RightSquare
-    , Comma
-    , Underscore
-    , BackQuote
-    , Dot
-    , DotDot
+    ]
+
+specialPunctuation :: Token -> Bool
+specialPunctuation = flip elem
+    [ BackQuote
     , Colon
     , DoubleColon
     , Equals
@@ -101,7 +102,16 @@ punctuation = flip elem
     , RightArrowTail
     , LeftDblArrowTail
     , RightDblArrowTail
-    , PragmaEnd
+    ]
+
+punctuation :: Token -> Bool
+punctuation = flip elem
+    [ SemiColon
+    , Comma
+    , Underscore
+    , Dot
+    , DotDot
+    -- , PragmaEnd
     ]
 
 pragma :: Token -> Bool

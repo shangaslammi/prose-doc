@@ -12,7 +12,6 @@ It can be seen as an alternative way to write literal Haskell code.
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -90,7 +89,7 @@ buildTree path src = case parseResult . parseMode <$> readExtensions src of
 
     where
         parseResult mode = do
-            tokens       <- lexTokenStreamWithMode mode src
+            tokens <- lexTokenStreamWithMode mode src
             (ast :: S.Module SrcSpan, comments) <- parseWithComments mode src
 
             let builder   = mkTree ast
@@ -128,18 +127,24 @@ markdownToHtml = writeHtml defaultWriterOptions . readMarkdown defaultParserSta
 
 treeToHtml :: Tree Classifier Printable -> H.Html
 treeToHtml = foldTree addSpan H.toHtml where
-    addSpan cls inner = case cssClass cls of
-        Nothing -> inner
-        Just c  -> H.span !. c $ inner
+    addSpan cls inner = case unwords (cssClass cls) of
+        "" -> H.span inner
+        c  -> H.span !. fromString c $ inner
 
-    cssClass Keyword = Just "kw"
-    cssClass Pragma  = Just "kw"
-    cssClass ModulePragma = Just "pragma"
-    cssClass ModuleName = Just "module-name"
-    cssClass Name = Just "name"
-    cssClass Signature = Just "typesig"
-    cssClass TypeName = Just "type-name"
-    cssClass _       = Nothing
+    cssClass Keyword = ["kw"]
+    cssClass Pragma  = ["kw"]
+    cssClass ModulePragma = ["pragma"]
+    cssClass ModuleName = ["module-name"]
+    cssClass Name = ["name"]
+    cssClass Signature = ["typesig"]
+    cssClass TypeName = ["type-name"]
+    cssClass ConstrName = ["constr-name"]
+    cssClass Braces = ["brace"]
+    cssClass SpecPunctuation = ["syntax"]
+    cssClass Punctuation = ["punct"]
+    cssClass InfixOperator = ["infix-op"]
+    cssClass StringLit = ["lit", "string"]
+    cssClass _       = []
 
 renderPage :: [Section] -> H.Html
 renderPage sections = H.docTypeHtml $ head >> body where

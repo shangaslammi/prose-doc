@@ -22,16 +22,16 @@ newtype TreeBuilder a = TreeBuilder (StateT (String, Pos) (State [Fragment]) a)
     deriving (Functor, Applicative, Monad)
 
 instance Monoid (TreeBuilder (Tree Classifier Printable)) where
-    mempty      = return mempty
-    mappend a b = liftM2 mappend a b
+    mempty  = return mempty
+    mappend = liftM2 mappend
 
 {-%
 Given a `TreeBuilder`, the origina lsource code and classified fragments, create
 a tree of classified, printable elements.
 -}
 runTreeBuilder :: TreeBuilder a -> String -> [Fragment] -> a
-runTreeBuilder (TreeBuilder bldr) src fragments =
-    evalState (evalStateT bldr (src,(1,1))) fragments
+runTreeBuilder (TreeBuilder bldr) src =
+    evalState $ evalStateT bldr (src,(1,1))
 
 {-%
 Pop all fragments that are before the given position.

@@ -11,6 +11,8 @@ source, but nothing more.
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Text.ProseDoc.Classifier where
 
@@ -21,6 +23,10 @@ import Control.Applicative
 import Data.String
 import Data.Foldable
 import Data.Monoid
+
+import Data.Data
+import Data.Typeable (cast)
+import Data.Generics.Schemes
 
 import Language.Haskell.Exts.SrcLoc
 import qualified Language.Haskell.Exts.Annotated.Syntax as S
@@ -91,8 +97,24 @@ instance ASTClassifier (S.Decl SrcSpan) where
             -> popPrintablesBefore l
             <> label Signature (mkTree names <> mkTree typ)
 
-        _ -> popPrintablesBefore l <> popPrintables l
+        _ -> popPrintablesBefore l
+            <> everything mappend genericTree d
+        -- _ -> popPrintablesBefore l <> popPrintables l
         where l = S.ann d
+
+genericTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
+genericTree (cast -> Just (c :: S.QName SrcSpan)) = mkTree c
+genericTree (cast -> Just c@(S.Con {})) = genericPop ConstrName c
+genericTree (cast -> Just c@(S.PApp _ qn _)) = genericPop ConstrName qn
+genericTree (cast -> Just c@(S.PRec _ qn _)) = genericPop ConstrName qn
+genericTree (cast -> Just (c :: S.Type SrcSpan)) = mkTree c
+genericTree (cast -> Just (c :: S.QOp SrcSpan)) = genericPop InfixOperator c
+genericTree (cast -> Just c@(S.String {})) = genericPop StringLit c
+genericTree _ = mempty
+
+genericPop :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
+genericPop cls ast = popPrintablesBefore l <> label cls (popPrintables l)
+    where l = S.ann ast
 
 instance ASTClassifier (S.ModuleName SrcSpan) where
     mkTree (S.ModuleName l' s)

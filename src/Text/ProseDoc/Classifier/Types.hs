@@ -15,6 +15,8 @@ data Classifier
     | Name
     | Keyword
     | Punctuation
+    | SpecPunctuation
+    | Braces
     | QuasiQuote
     | THQuote
     | THEscape
@@ -23,6 +25,8 @@ data Classifier
     | LineComment
     | ProseComment String
     | Signature
+    | InfixOperator
+    | StringLit
     deriving (Show, Eq, Ord)
 
 type LineNo = Int
