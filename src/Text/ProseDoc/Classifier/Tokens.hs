@@ -1,4 +1,14 @@
+{-%
+## Token Classification
 
+Whereas [`Text.ProseDoc.Classifier`](#Test.ProseDoc.Classifier) classifies
+source fragments based on the AST, the `Tokens` sub-module assigns
+classifications based on `Tokens` that are returned by [`lexTokenStream`](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html#v:lexTokenStream)
+in [`Language.Haskell.Exts.Lexer`](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html).
+
+This module also handles [`Comment`](http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Comments.html#t:Comment)
+values that we get as a side-product of parsing the AST.
+-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE RecordWildCards #-}
 
@@ -13,6 +23,10 @@ import Text.ProseDoc.Classifier.Types
 instance SourceFragment (Loc Token) where
     toFragments lt
         | cls == Pragma
+{-%
+We do a little bit of manual tweaking for `Pragma` tokens because the pragma
+starting token includes both the opening comment bracket and the pragma name.
+-}
             = (pos `setLen` 3, Punctuation)
             : (pos `moveCol` 3, Pragma)
             : []
@@ -28,8 +42,18 @@ instance SourceFragment (Loc Token) where
 
 instance SourceFragment Comment where
     toFragments (Comment block loc txt) = (loc', comment) : [] where
+{-%
+Block comments that start with the character '%' are classified as "prose" and
+they get lifted out of the source in a later phase. All other comments are
+retained in the source as-is.
+
+-}
         loc' = case txt of
             '%':_ -> loc
+{-%
+Prose comments must start and end with a newline. The extra lines are pruned
+here to avoid extra gaps in the source code.
+-}
                 { srcSpanStartColumn = 1
                 , srcSpanEndColumn   = 1
                 , srcSpanEndLine     = srcSpanEndLine + 1
@@ -119,7 +143,6 @@ punctuation = flip elem
     , Underscore
     , Dot
     , DotDot
-    -- , PragmaEnd
     ]
 
 pragma :: Token -> Bool

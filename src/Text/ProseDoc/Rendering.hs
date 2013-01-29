@@ -1,3 +1,6 @@
+{-%
+## Rendering to HTML
+-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -27,9 +30,18 @@ import Text.ProseDoc.Classifier.Types
 
 import System.FilePath
 
+{-%
+`htmlTOC` builds a hierarchical <ul> tree from a list of filenames so that
+files that are in the same directory are placed as siblings in the tree.
+-}
 htmlTOC :: [FilePath] -> H.Html
 htmlTOC = (H.ul !. "toc") . evalState (go []) . idify  where
 
+{-%
+The internal implementation is rather hairy (there has to be a simpler way to
+do this!). We maintain the list of remaining filenames in the `State` monad
+and pop them out one by one when we are a the appropriate level of the tree.
+-}
     go prefix = do
         paths <- get
         case paths of
@@ -64,9 +76,9 @@ moduleToHtml (fp, t)
 
 
 pathToId :: FilePath -> String
-pathToId = map replaceChar where
+pathToId = map replaceChar . dropExtension where
     replaceChar c
-        | c `elem` "./" = '-'
+        | c `elem` pathSeparators = '.'
         | otherwise     = c
 
 extractSections :: Tree Classifier Printable -> [Section]

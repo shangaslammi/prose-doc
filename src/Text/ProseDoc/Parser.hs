@@ -1,3 +1,9 @@
+{-%
+## Parsing Haskell Source
+
+Haskell modules are parsed using [`Language.Haskell.Exts.Parser`](http://hackage.haskell.org/packages/archive/haskell-src-exts/1.13.5/doc/html/Language-Haskell-Exts-Parser.html)
+and the tokens, comments and AST is fed to a `TreeBuilder` (see [`Text.ProseDoc.Tree.Builder`](#Text.ProseDoc.Tree.Builder)).
+-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Text.ProseDoc.Parser where
@@ -46,7 +52,6 @@ buildTree path src = case parseResult . parseMode <$> readExtensions src of
 
         parseMode exts = defaultParseMode
             { parseFilename = path
-            {-% Disabling fixities allows parsing custom operators -}
             , fixities = Just []
             , extensions = exts
             }
