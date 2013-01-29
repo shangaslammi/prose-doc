@@ -105,7 +105,10 @@ instance ASTClassifier (S.Module SrcSpan) where
         <*> popRemaining
 
 {-%
-
+`gTree` takes advantage of the `Data.Data` instance of the AST elements and
+makes transformations throughout the tree. "Leaf" type nodes like names are
+processed using `popAst` and more complex elements delegate to the AST element's
+`ASTClassifier` type class instance.
 -}
 gTree :: Data a => a -> TreeBuilder (Tree Classifier Printable)
 gTree (cast -> Just (c :: S.ModulePragma SrcSpan)) = mkTree c
@@ -123,19 +126,14 @@ gTree (cast -> Just c@(S.TypeSig l names typ))
     <> label Signature (mkTree names <> mkTree typ)
 gTree _ = mempty
 
-popAst :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
-popAst cls ast = popPrintablesBefore l <> label cls (popPrintables l)
-    where l = S.ann ast
-
-popAst' :: S.Annotated ast => Classifier -> ast SrcSpan -> TreeBuilder (Tree Classifier Printable)
-popAst' cls ast = popPrintablesBefore l <> label' cls (popPrintables l)
-    where l = S.ann ast
-
 {-%
 `label` is an short-hand function for adding a parent classifier to any value
 that is an `ASTClassifier` itself.
 -}
-label :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
+label :: ASTClassifier a
+    => Classifier
+    -> a
+    -> TreeBuilder (Tree Classifier Printable)
 label l a = Label l <$> mkTree a
 
 {-%
@@ -143,9 +141,39 @@ label l a = Label l <$> mkTree a
 This is sometimes useful to prevent an element from gettings several redundant
 classifiers.
 -}
-label' :: ASTClassifier a => Classifier -> a -> TreeBuilder (Tree Classifier Printable)
+label' :: ASTClassifier a
+    => Classifier
+    -> a
+    -> TreeBuilder (Tree Classifier Printable)
 label' l a = Label l . pruneLabels <$> mkTree a
 
+{-%
+`popAst` assigns the given label to the specified, annotated AST element and pops
+all code fragments within the AST element's `SrcSpan`.
+-}
+popAst :: S.Annotated ast
+    => Classifier
+    -> ast SrcSpan
+    -> TreeBuilder (Tree Classifier Printable)
+popAst cls ast = popPrintablesBefore l <> label cls (popPrintables l)
+    where l = S.ann ast
+
+{-%
+`popAst'` is a version of `popAst` which prunes any nested labels.
+-}
+popAst' :: S.Annotated ast
+    => Classifier
+    -> ast SrcSpan
+    -> TreeBuilder (Tree Classifier Printable)
+popAst' cls ast = popPrintablesBefore l <> label' cls (popPrintables l)
+    where l = S.ann ast
+
+{-%
+The rest of the module consists of `ASTClassifier` instances for  AST nodes
+for which we want to do some specific processing i.e. assign specific labels
+to some children of the node which cannot be accurately identified just based
+on their type (in which case we could process them in `gTree`).
+-}
 instance ASTClassifier (S.ModulePragma SrcSpan) where
     mkTree p = case p of
         S.LanguagePragma l names ->
