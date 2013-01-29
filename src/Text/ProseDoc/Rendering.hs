@@ -31,7 +31,7 @@ import Text.ProseDoc.Classifier.Types
 import System.FilePath
 
 {-%
-`htmlTOC` builds a hierarchical <ul> tree from a list of filenames so that
+`htmlTOC` builds a hierarchical &lt;ul&gt; tree from a list of filenames so that
 files that are in the same directory are placed as siblings in the tree.
 -}
 htmlTOC :: [FilePath] -> H.Html
