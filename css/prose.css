@@ -1,0 +1,142 @@
+body {
+  font-family: verdana, helvetica, sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+pre {
+  margin: 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td {
+  padding: 0;
+  margin: 0;
+}
+table.sections tr {
+  vertical-align: top;
+  width: 100%;
+}
+td.code {
+  background: #272822;
+  padding-left: 1em;
+  padding-right: 1em;
+  width: 60%;
+}
+tr.file-header td {
+  padding-top: 1em;
+}
+tr.file-header code {
+  background: #323530;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  border-radius: 5px 5px 0 0;
+  color: #c0c0c0;
+}
+.toc {
+  margin: 0;
+  padding: 1em 1em 0 1em;
+  font-size: 14px;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d8d8e8), to(#f0f0f0));
+}
+.toc li {
+  padding-top: 0.2em;
+  list-style-type: none;
+}
+.toc a,
+.toc a:visited,
+.toc a:active {
+  text-decoration: none;
+  color: #104020;
+}
+td.prose {
+  width: 40%;
+  padding-right: 1em;
+  padding-left: 1em;
+  color: #202020;
+}
+td.prose h1,
+td.prose h2,
+td.prose h3,
+td.prose h4,
+td.prose h5,
+td.prose h6,
+td.prose p {
+  margin-top: 0em;
+}
+td.prose h1,
+td.prose h2,
+td.prose h3 {
+  font-family: serif;
+}
+td.prose p,
+td.prose ul,
+td.prose ol {
+  font-size: 13px;
+}
+td.prose li {
+  padding-bottom: 0.5em;
+}
+td.prose a,
+td.prose a:visited,
+td.prose a:active {
+  font-weight: bold;
+  color: #105030;
+  text-decoration: none;
+  border-bottom: 1px dotted #a0f0c0;
+}
+td.prose a:hover,
+td.prose a:visited:hover,
+td.prose a:active:hover {
+  background: #a0f0c0;
+}
+code.haskell {
+  color: #f8f8f2;
+}
+code.haskell .punct {
+  color: #f8f8f2;
+}
+code.haskell .kw,
+code.haskell .syntax,
+code.haskell .infix-op,
+code.haskell .brace {
+  color: #f92672;
+}
+code.haskell .pragma .name {
+  color: #9bd22d;
+}
+code.haskell .pragma .punct {
+  color: #f8f8f2;
+}
+code.haskell .module-name {
+  color: #ae81ff;
+}
+code.haskell .constr-name {
+  color: #ae81ff;
+}
+code.haskell .typesig .name {
+  color: #98ce2c;
+}
+code.haskell .type-name {
+  color: #62cfe3;
+}
+code.haskell .lit.string {
+  color: #f9d060;
+}
+code.haskell .comment {
+  color: #808080;
+}
+code.haskell .import .name {
+  color: #9bd22d;
+}
+code.haskell .import .name .brace {
+  color: #f8f8f2;
+}
+code.haskell .import .name .syntax {
+  color: #9bd22d;
+}
+

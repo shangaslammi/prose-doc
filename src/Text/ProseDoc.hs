@@ -28,6 +28,8 @@ import Text.Pandoc.SelfContained
 import Text.ProseDoc.Rendering
 import Text.ProseDoc.Parser
 
+import Paths_prose_doc
+
 {-%
 The current version can generate a document either from a single source file
 or a hierarchical module structure.
@@ -46,8 +48,10 @@ module. The [`makeSelfContained`](http://hackage.haskell.org/packages/archive/pa
 function from [`pandoc`](http://hackage.haskell.org/package/pandoc)
 is used to embed the style information from an external css file.
 -}
-    makeSelfContained (Just "css")
-        $ renderPage mempty
+    cssPath <- getDataFileName "css/prose.css"
+
+    makeSelfContained Nothing
+        $ renderPage cssPath mempty
         $ [moduleToHtml (path, t)]
 
 findModules :: FilePath -> IO [FilePath]
@@ -78,7 +82,8 @@ first.
         return $ moduleToHtml (m, t)
 
     let toc = htmlTOC mods
+    cssPath <- getDataFileName "css/prose.css"
 
-    makeSelfContained (Just "css") $ renderPage toc htmls
+    makeSelfContained Nothing $ renderPage cssPath toc htmls
 
 

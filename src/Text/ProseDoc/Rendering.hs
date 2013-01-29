@@ -117,15 +117,15 @@ codeTreeToHtml = foldTree addSpan H.toHtml . pruneEmptyBranches where
     cssClass ImportDecl      = ["import"]
     cssClass _               = []
 
-renderPage :: H.Html -> [H.Html] -> String
-renderPage toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
-    docHead = H.head $ css >> H.title "ProseDoc Generated Module Listing"
+renderPage :: FilePath -> H.Html -> [H.Html] -> String
+renderPage css toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
+    docHead = H.head $ cssLink >> H.title "ProseDoc Generated Module Listing"
     docBody = H.body $ (H.table !. "sections") $ toc <> mconcat mods
 
-    css = H.link
+    cssLink = H.link
         ! A.rel "stylesheet"
         ! A.type_ "text/css"
-        ! A.href "prose.css"
+        ! A.href (fromString css)
 
 data Section = Section
     { sectionProse :: String
