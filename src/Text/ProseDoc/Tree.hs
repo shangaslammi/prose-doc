@@ -7,9 +7,8 @@ import Data.Monoid
 import Data.Foldable (foldMap)
 
 {-%
-The idea is to build a tree, where each branch of the tree can add "classifiers"
-and leafs of the tree contains actual tokens that are printed. The classifiers
-can then be used e.g. by a HTML rendering engine to add CSS class annotations.
+A tree data type holds labels, branches and leaf nodes. A label classifies all
+branches and leaves below it.
 -}
 data Tree l n where
     Empty  :: Tree l n
@@ -19,9 +18,9 @@ data Tree l n where
     deriving (Show)
 
 {-%
-The tree is folded into a monoid depth-first using an abstract function that
-takes in two functions. The first is used to process branches and the second
-to process leaves.
+The tree is folded into a monoid, depth-first using an abstract function that
+takes in two functions. The first is used to process labels and the second
+to process leaf data.
 -}
 foldTree :: Monoid r => (l -> r -> r) -> (n -> r) -> Tree l n -> r
 foldTree bf lf = go where
@@ -31,7 +30,7 @@ foldTree bf lf = go where
     go (Leaf t)        = lf t
 
 {-%
-Trees form a monoid so that the two trees are merged into the same branch.
+Trees form a monoid so that the two trees are inserted as siblings into a branch.
 -}
 instance Monoid (Tree l n) where
     mempty          = Empty
@@ -42,12 +41,18 @@ instance Monoid (Tree l n) where
     mappend a (Branch b) = Branch (a:b)
     mappend a b = Branch [a,b]
 
+{-%
+Remove all label nodes from the tree.
+-}
 pruneLabels :: Tree l n -> Tree l n
 pruneLabels t = case t of
     Label _ t' -> t'
     Branch bs  -> Branch $ map pruneLabels bs
     t'         -> t'
 
+{-%
+Remove parts of the tree that don't contain any leaf nodes.
+-}
 pruneEmptyBranches :: Tree l n -> Tree l n
 pruneEmptyBranches t = go t where
     go t = case t of
@@ -107,18 +112,3 @@ splitTree test = go Nothing where
         _                -> (sep, l) : go sep' r
 
         where (l, sep', r) = breakTree test t
-
-testSplit = splitTree (=='e') t where
-    t = Branch [b1,b2,b3]
-    b1 = Label '1' $ Branch [a,b,c]
-    a = Label 'a' (Leaf 1)
-    b = Label 'b' (Leaf 2)
-    c = Label 'c' (Leaf 3)
-    b2 = Label '2' $ Branch [d,e,f]
-    d = Label 'd' (Leaf 4)
-    e = Label 'e' (Leaf 5)
-    f = Label 'f' (Leaf 6)
-    b3 = Label '3' $ Branch [g,h,i]
-    g = Label 'g' (Leaf 7)
-    h = Label 'h' (Leaf 8)
-    i = Label 'i' (Leaf 9)

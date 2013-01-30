@@ -173,6 +173,9 @@ The rest of the module consists of `ASTClassifier` instances for  AST nodes
 for which we want to do some specific processing i.e. assign specific labels
 to some children of the node which cannot be accurately identified just based
 on their type (in which case we could process them in `gTree`).
+
+This part of the syntax highlighter is still work-in-progress. We need more
+`ASTClassifier` instances to add rest of the syntax coloring.
 -}
 instance ASTClassifier (S.ModulePragma SrcSpan) where
     mkTree p = case p of

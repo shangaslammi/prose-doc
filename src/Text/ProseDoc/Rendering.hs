@@ -41,6 +41,12 @@ htmlTOC = (H.ul !. "toc") . evalState (go []) . idify  where
 The internal implementation is rather hairy (there has to be a simpler way to
 do this!). We maintain the list of remaining filenames in the `State` monad
 and pop them out one by one when we are a the appropriate level of the tree.
+
+We use two mutually recursive functions `go` and `go2`.
+
+`go` processes module
+names from the stack until it hits a name that doesn't match the current module
+prefix.
 -}
     go prefix = do
         paths <- get
@@ -53,14 +59,30 @@ and pop them out one by one when we are a the appropriate level of the tree.
                     Nothing -> return mempty
                     Just r  -> put fps >> go2 prefix (r,anchor)
 
+{-%
+`go2` inserts the nested levels for a single module name
+-}
     go2 prefix ((x:xs), anchor) = do
         let base  = takeBaseName x
             label = H.toHtml (intercalate "." (prefix ++ [base]))
             link  = H.a ! A.href (fromString ('#' : anchor)) $ label
             tag   = if null xs then link else label
         descend <- case xs of
+{-%
+`go (prefix ++ [base])` handles cases where we've just processed e.g. module
+`Foo/Bar.hs` and created a link for it. Next we have to look for possible child
+modules under `Foo/Bar/`.
+-}
             [] -> go (prefix ++ [base])
+{-%
+If we still have parts of the current module name left, recurse `go2` with the
+next name part.
+-}
             _  -> go2 (prefix ++ [x]) (xs, anchor)
+
+{-%
+Finally, handle sibling modules that share the same prefix.
+-}
         siblings <- go prefix
         return $ H.li tag <> H.ul descend <> siblings
 
@@ -81,6 +103,14 @@ pathToId = map replaceChar . dropExtension where
         | c `elem` pathSeparators = '.'
         | otherwise     = c
 
+data Section = Section
+    { sectionProse :: String
+    , sectionCode  :: Tree Classifier Printable
+    } deriving Show
+
+{-%
+Split the presentation tree into sections at every `ProseComment` label.
+-}
 extractSections :: Tree Classifier Printable -> [Section]
 extractSections = (pad:) . (++[pad]) . map toSection . splitTree isProse where
     toSection (sep, tree) = case sep of
@@ -111,6 +141,9 @@ codeTreeToHtml = foldTree addSpan H.toHtml . pruneEmptyBranches where
         "" -> inner
         c  -> H.span !. fromString c $ inner
 
+{-%
+Map the fragment classifiers into css classes.
+-}
     cssClass Keyword         = ["kw"]
     cssClass Pragma          = ["kw"]
     cssClass ModulePragma    = ["pragma"]
@@ -138,8 +171,3 @@ renderPage css toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
         ! A.rel "stylesheet"
         ! A.type_ "text/css"
         ! A.href (fromString css)
-
-data Section = Section
-    { sectionProse :: String
-    , sectionCode  :: Tree Classifier Printable
-    } deriving Show
