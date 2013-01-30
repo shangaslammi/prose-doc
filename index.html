@@ -1,49 +1,856 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html><head><link href="data:text/css,body%20%7B%0A%20%20font%2Dfamily%3A%20verdana%2C%20helvetica%2C%20sans%2Dserif%3B%0A%20%20background%3A%20%23f0f0f0%3B%0A%20%20margin%3A%200%3B%0A%20%20padding%3A%200%3B%0A%7D%0Apre%20%7B%0A%20%20margin%3A%200%3B%0A%7D%0Atable%20%7B%0A%20%20width%3A%20100%25%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%20%20border%2Dspacing%3A%200%3B%0A%7D%0Atd%20%7B%0A%20%20padding%3A%200%3B%0A%20%20margin%3A%200%3B%0A%7D%0Atable%2Esections%20tr%20%7B%0A%20%20vertical%2Dalign%3A%20top%3B%0A%20%20width%3A%20100%25%3B%0A%7D%0Atd%2Ecode%20%7B%0A%20%20background%3A%20%23272822%3B%0A%20%20padding%2Dleft%3A%201em%3B%0A%20%20padding%2Dright%3A%201em%3B%0A%20%20width%3A%2060%25%3B%0A%7D%0Atr%2Efile%2Dheader%20td%20%7B%0A%20%20padding%2Dtop%3A%201em%3B%0A%7D%0Atr%2Efile%2Dheader%20code%20%7B%0A%20%20background%3A%20%23323530%3B%0A%20%20padding%2Dleft%3A%205px%3B%0A%20%20padding%2Dright%3A%205px%3B%0A%20%20padding%2Dtop%3A%205px%3B%0A%20%20border%2Dradius%3A%205px%205px%200%200%3B%0A%20%20color%3A%20%23c0c0c0%3B%0A%7D%0A%2Etoc%20%7B%0A%20%20margin%3A%200%3B%0A%20%20padding%3A%201em%201em%200%201em%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20background%3A%20%2Dwebkit%2Dgradient%28linear%2C%200%25%200%25%2C%200%25%20100%25%2C%20from%28%23d8d8e8%29%2C%20to%28%23f0f0f0%29%29%3B%0A%7D%0A%2Etoc%20li%20%7B%0A%20%20padding%2Dtop%3A%200%2E2em%3B%0A%20%20list%2Dstyle%2Dtype%3A%20none%3B%0A%7D%0A%2Etoc%20a%2C%0A%2Etoc%20a%3Avisited%2C%0A%2Etoc%20a%3Aactive%20%7B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%20%20color%3A%20%23104020%3B%0A%7D%0Atd%2Eprose%20%7B%0A%20%20width%3A%2040%25%3B%0A%20%20padding%2Dright%3A%201em%3B%0A%20%20padding%2Dleft%3A%201em%3B%0A%20%20color%3A%20%23202020%3B%0A%7D%0Atd%2Eprose%20h1%2C%0Atd%2Eprose%20h2%2C%0Atd%2Eprose%20h3%2C%0Atd%2Eprose%20h4%2C%0Atd%2Eprose%20h5%2C%0Atd%2Eprose%20h6%2C%0Atd%2Eprose%20p%20%7B%0A%20%20margin%2Dtop%3A%200em%3B%0A%7D%0Atd%2Eprose%20h1%2C%0Atd%2Eprose%20h2%2C%0Atd%2Eprose%20h3%20%7B%0A%20%20font%2Dfamily%3A%20serif%3B%0A%7D%0Atd%2Eprose%20p%2C%0Atd%2Eprose%20ul%2C%0Atd%2Eprose%20ol%20%7B%0A%20%20font%2Dsize%3A%2013px%3B%0A%7D%0Atd%2Eprose%20li%20%7B%0A%20%20padding%2Dbottom%3A%200%2E5em%3B%0A%7D%0Atd%2Eprose%20a%2C%0Atd%2Eprose%20a%3Avisited%2C%0Atd%2Eprose%20a%3Aactive%20%7B%0A%20%20font%2Dweight%3A%20bold%3B%0A%20%20color%3A%20%23105030%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%20%20border%2Dbottom%3A%201px%20dotted%20%23a0f0c0%3B%0A%7D%0Atd%2Eprose%20a%3Ahover%2C%0Atd%2Eprose%20a%3Avisited%3Ahover%2C%0Atd%2Eprose%20a%3Aactive%3Ahover%20%7B%0A%20%20background%3A%20%23a0f0c0%3B%0A%7D%0Acode%2Ehaskell%20%7B%0A%20%20color%3A%20%23f8f8f2%3B%0A%7D%0Acode%2Ehaskell%20%2Epunct%20%7B%0A%20%20color%3A%20%23f8f8f2%3B%0A%7D%0Acode%2Ehaskell%20%2Ekw%2C%0Acode%2Ehaskell%20%2Esyntax%2C%0Acode%2Ehaskell%20%2Einfix%2Dop%2C%0Acode%2Ehaskell%20%2Ebrace%20%7B%0A%20%20color%3A%20%23f92672%3B%0A%7D%0Acode%2Ehaskell%20%2Epragma%20%2Ename%20%7B%0A%20%20color%3A%20%239bd22d%3B%0A%7D%0Acode%2Ehaskell%20%2Epragma%20%2Epunct%20%7B%0A%20%20color%3A%20%23f8f8f2%3B%0A%7D%0Acode%2Ehaskell%20%2Emodule%2Dname%20%7B%0A%20%20color%3A%20%23ae81ff%3B%0A%7D%0Acode%2Ehaskell%20%2Econstr%2Dname%20%7B%0A%20%20color%3A%20%23ae81ff%3B%0A%7D%0Acode%2Ehaskell%20%2Etypesig%20%2Ename%20%7B%0A%20%20color%3A%20%2398ce2c%3B%0A%7D%0Acode%2Ehaskell%20%2Etype%2Dname%20%7B%0A%20%20color%3A%20%2362cfe3%3B%0A%7D%0Acode%2Ehaskell%20%2Elit%2Estring%20%7B%0A%20%20color%3A%20%23f9d060%3B%0A%7D%0Acode%2Ehaskell%20%2Ecomment%20%7B%0A%20%20color%3A%20%23808080%3B%0A%7D%0Acode%2Ehaskell%20%2Eimport%20%2Ename%20%7B%0A%20%20color%3A%20%239bd22d%3B%0A%7D%0Acode%2Ehaskell%20%2Eimport%20%2Ename%20%2Ebrace%20%7B%0A%20%20color%3A%20%23f8f8f2%3B%0A%7D%0Acode%2Ehaskell%20%2Eimport%20%2Ename%20%2Esyntax%20%7B%0A%20%20color%3A%20%239bd22d%3B%0A%7D%0A%0A" rel="stylesheet" type="text/css"><title>ProseDoc Generated Module Listing</title></head><body><table class="sections"><ul class="toc"><li>Text</li><ul><li><a href="#Text.ProseDoc">Text.ProseDoc</a></li><ul><li><a href="#Text.ProseDoc.Classifier">Text.ProseDoc.Classifier</a></li><ul><li><a href="#Text.ProseDoc.Classifier.Tokens">Text.ProseDoc.Classifier.Tokens</a></li><ul></ul><li><a href="#Text.ProseDoc.Classifier.Types">Text.ProseDoc.Classifier.Types</a></li><ul></ul></ul><li><a href="#Text.ProseDoc.Parser">Text.ProseDoc.Parser</a></li><ul></ul><li><a href="#Text.ProseDoc.Rendering">Text.ProseDoc.Rendering</a></li><ul></ul><li><a href="#Text.ProseDoc.Tree">Text.ProseDoc.Tree</a></li><ul><li><a href="#Text.ProseDoc.Tree.Builder">Text.ProseDoc.Tree.Builder</a></li><ul></ul></ul></ul></ul></ul><tr class="file-header"><td><a id="Text.ProseDoc"></a></td><td><code>Text/ProseDoc.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"><h1 id="text.prosedoc">Text.ProseDoc</h1>
+<p><code>Text.ProseDoc</code> is a tool that reads markdown formatted comments from a Haskell source file and composes the comments and the associated source into a HTML document where the prose and source flow side by side in sync.</p>
+<p>The concept is blatantly borrowed from the CoffeeScript tool <a href="http://jashkenas.github.com/docco/">docco</a>.</p>
+<p>ProseDoc can be seen as an alternative way to write and format literal Haskell code. However, the main motivation behind writing ProseDoc was simply that it seemed like an interesting project to tinker with.</p>
+<p>The source code repository is located at <a href="https://github.com/shangaslammi/prose-doc">https://github.com/shangaslammi/prose-doc</a>.</p></td><td class="code"><pre><code class="haskell"><span class="kw">module</span> Text.ProseDoc <span class="kw">where</span>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="ProseDoc : Literate programming / documentation tool for Haskell" />
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Applicative</span> <span class="brace">(</span><span class="name"><span class="brace">(</span>&lt;$&gt;<span class="brace">)</span></span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Monad</span>       <span class="brace">(</span><span class="name"><span class="brace">(</span>&lt;=&lt;<span class="brace">)</span></span><span class="punct">,</span> <span class="name">filterM</span><span class="punct">,</span> <span class="name">forM</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Error</span></span>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Monoid</span> <span class="brace">(</span><span class="name">mempty</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.List</span>   <span class="brace">(</span><span class="name">sort</span><span class="punct">,</span> <span class="name">isPrefixOf</span></span><span class="brace">)</span>
 
-    <title>ProseDoc</title>
-  </head>
+<span class="import"><span class="kw">import</span> <span class="module-name">System.Directory</span> <span class="brace">(</span><span class="name">getDirectoryContents</span><span class="punct">,</span> <span class="name">doesFileExist</span><span class="punct">,</span> <span class="name">doesDirectoryExist</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">System.FilePath</span>  <span class="brace">(</span><span class="name"><span class="brace">(</span>&lt;/&gt;<span class="brace">)</span></span><span class="punct">,</span> <span class="name">takeExtension</span><span class="punct">,</span> <span class="name">makeRelative</span></span><span class="brace">)</span>
 
-  <body>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Pandoc.SelfContained</span></span>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/shangaslammi/prose-doc">View on GitHub</a>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Rendering</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Parser</span></span>
 
-          <h1 id="project_title">ProseDoc</h1>
-          <h2 id="project_tagline">Literate programming / documentation tool for Haskell</h2>
+<span class="import"><span class="kw">import</span> <span class="module-name">Paths_prose_doc</span></span>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/shangaslammi/prose-doc/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/shangaslammi/prose-doc/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+</code></pre></td></tr><tr><td class="prose"><p>The current version can generate a document either from a single source file or a hierarchical module structure.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">generatePage</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">IO</span> <span class="type-name">String</span></span>
+<span class="name">generatePage</span> <span class="name">path</span> <span class="syntax">=</span> <span class="kw">do</span>
+    <span class="name">isFile</span> <span class="syntax">&lt;-</span> <span class="name">doesFileExist</span> <span class="name">path</span>
+    <span class="kw">if</span> <span class="name">isFile</span> <span class="kw">then</span> <span class="name">processSingle</span> <span class="name">path</span> <span class="kw">else</span> <span class="name">processDirectory</span> <span class="name">path</span>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h2></h2>
-      </section>
-    </div>
+<span class="typesig"><span class="name">processSingle</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">IO</span> <span class="type-name">String</span></span>
+<span class="name">processSingle</span> <span class="name">path</span> <span class="syntax">=</span> <span class="kw">do</span>
+    <span class="name">t</span> <span class="syntax">&lt;-</span> <span class="name">runScript</span> <span class="brace">(</span><span class="name">parseSourceFile</span> <span class="name">path</span><span class="brace">)</span>
+</code></pre></td></tr><tr><td class="prose"><p>For a single document, we leave out the TOC and simply format the given module. The <a href="http://hackage.haskell.org/packages/archive/pandoc/latest/doc/html/Text-Pandoc-SelfContained.html#v:makeSelfContained"><code>makeSelfContained</code></a> function from <a href="http://hackage.haskell.org/package/pandoc"><code>pandoc</code></a> is used to embed the style information from an external css file.</p></td><td class="code"><pre><code class="haskell">    <span class="name">cssPath</span> <span class="syntax">&lt;-</span> <span class="name">getDataFileName</span> <span class="lit string">&quot;css/prose.css&quot;</span>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">ProseDoc maintained by <a href="https://github.com/shangaslammi">shangaslammi</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    <span class="name">makeSelfContained</span> <span class="constr-name">Nothing</span>
+        <span class="infix-op">$</span> <span class="name">renderPage</span> <span class="name">cssPath</span> <span class="name">mempty</span>
+        <span class="infix-op">$</span> <span class="brace">[</span><span class="name">moduleToHtml</span> <span class="brace">(</span><span class="name">path</span><span class="punct">,</span> <span class="name">t</span><span class="brace">)</span><span class="brace">]</span>
 
-    
+<span class="typesig"><span class="name">findModules</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">IO</span> <span class="brace">[</span><span class="type-name">FilePath</span></span><span class="brace">]</span>
+<span class="name">findModules</span> <span class="name">root</span> <span class="syntax">=</span> <span class="kw">do</span>
+    <span class="name">isFile</span> <span class="syntax">&lt;-</span> <span class="name">doesFileExist</span> <span class="name">root</span>
+    <span class="kw">if</span> <span class="name">isFile</span>
+</code></pre></td></tr><tr><td class="prose"><p>For directories, we walk through all subdirectories and gather all files with the extension <code>.hs</code>.</p></td><td class="code"><pre><code class="haskell">        <span class="kw">then</span> <span class="name">return</span> <span class="infix-op">$</span> <span class="kw">if</span> <span class="name">takeExtension</span> <span class="name">root</span> <span class="infix-op">==</span> <span class="lit string">&quot;.hs&quot;</span> <span class="kw">then</span> <span class="brace">[</span><span class="name">root</span><span class="brace">]</span> <span class="kw">else</span> <span class="brace">[</span><span class="brace">]</span>
+        <span class="kw">else</span> <span class="name">fmap</span> <span class="name">concat</span>
+            <span class="infix-op">$</span>   <span class="name">mapM</span> <span class="name">findModules</span>
+            <span class="infix-op">=&lt;&lt;</span> <span class="name">map</span> <span class="brace">(</span><span class="name">root</span> <span class="infix-op">&lt;/&gt;</span><span class="brace">)</span> <span class="infix-op">.</span> <span class="name">filter</span> <span class="brace">(</span><span class="name">not</span> <span class="infix-op">.</span> <span class="name">isPrefixOf</span> <span class="lit string">&quot;.&quot;</span><span class="brace">)</span>
+            <span class="infix-op">&lt;$&gt;</span> <span class="name">getDirectoryContents</span> <span class="name">root</span>
 
-  </body>
-</html>
+<span class="typesig"><span class="name">processDirectory</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">IO</span> <span class="type-name">String</span></span>
+<span class="name">processDirectory</span> <span class="name">path</span> <span class="syntax">=</span> <span class="kw">do</span>
+</code></pre></td></tr><tr><td class="prose"><p>Currently, the modules are presented in alphabetical order but this should be user configurable so that more relevant modules can be made to appear first.</p></td><td class="code"><pre><code class="haskell">    <span class="name">mods</span> <span class="syntax">&lt;-</span> <span class="name">sort</span> <span class="infix-op">.</span> <span class="name">map</span> <span class="brace">(</span><span class="name">makeRelative</span> <span class="name">path</span><span class="brace">)</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">findModules</span> <span class="name">path</span>
+
+    <span class="name">htmls</span> <span class="syntax">&lt;-</span> <span class="name">forM</span> <span class="name">mods</span> <span class="infix-op">$</span> <span class="syntax">\</span><span class="name">m</span> <span class="syntax">-&gt;</span> <span class="kw">do</span>
+        <span class="name">t</span> <span class="syntax">&lt;-</span> <span class="name">runScript</span> <span class="infix-op">$</span> <span class="name">parseSourceFile</span> <span class="brace">(</span><span class="name">path</span> <span class="infix-op">&lt;/&gt;</span> <span class="name">m</span><span class="brace">)</span>
+        <span class="name">return</span> <span class="infix-op">$</span> <span class="name">moduleToHtml</span> <span class="brace">(</span><span class="name">m</span><span class="punct">,</span> <span class="name">t</span><span class="brace">)</span>
+
+    <span class="kw">let</span> <span class="name">toc</span> <span class="syntax">=</span> <span class="name">htmlTOC</span> <span class="name">mods</span>
+    <span class="name">cssPath</span> <span class="syntax">&lt;-</span> <span class="name">getDataFileName</span> <span class="lit string">&quot;css/prose.css&quot;</span>
+
+    <span class="name">makeSelfContained</span> <span class="constr-name">Nothing</span> <span class="infix-op">$</span> <span class="name">renderPage</span> <span class="name">cssPath</span> <span class="name">toc</span> <span class="name">htmls</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Classifier"></a></td><td><code>Text/ProseDoc/Classifier.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"><h2 id="forcing-a-square-peg-through-a-round-hole">Forcing a square peg through a round hole</h2>
+<p>(aka: syntax coloring of Haskell source code using the <a href="http://hackage.haskell.org/package/haskell-src-exts"><code>haskell-src-exts</code></a> package)</p>
+<p>There are several good syntax highlighting libraries and tools available, so the simplest thing would have been just to use one and be done with it. However, none of the syntax highlighters that I could find worked 100% perfectly with the plethora of language extensions available for modern GHC (<code>TemplateHaskell</code> is particularly tricky), so in a bout of perfectionism I decided I'd try and make a syntax highlighter that uses a full blown Haskell parser to get everything right.</p>
+<p>If I really wanted to be sure I'm supporting all the syntax extensions currently available, the right thing to do would be to use the <a href="http://www.haskell.org/ghc/docs/latest/html/libraries/ghc/index.html"><code>GHC API</code></a> directly so that anything I can compile, I can highlight. However, I have to admit that the thought of diving into the GHC API absolutely terrifies me (I'll get to it some day, I promise!), so settled with the next best thing, namely <a href="http://hackage.haskell.org/package/haskell-src-exts"><code>haskell-src-exts</code></a>.</p>
+<p>Now, <code>haskell-src-exts</code> supports an admirably large portion of the Haskell syntax, but token classification for syntax highlighting isn't really one of the targeted use-cases for the library.</p>
+<ul>
+<li>You get a <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html#t:Token"><code>Token</code></a> stream from the <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html">lexer</a> that contains information such as which words are keywords.</li>
+<li>You get an AST (thankfully, annotated with position meta-data) from the <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Parser.html">parser</a> for figuring out the context, i.e. whether you are inside a type signature or a pattern match.</li>
+<li>And finally, you get <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/1.13.5/doc/html/Language-Haskell-Exts-Comments.html">comments</a> (again, tagged with position info) as a separate list.</li>
+</ul>
+<p>Which gets us to this module: <code>Classifier</code></p></td><td class="code"><pre><code class="haskell"><span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">MultiParamTypeClasses</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">GeneralizedNewtypeDeriving</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">OverloadedStrings</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">FlexibleInstances</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">RecordWildCards</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">ViewPatterns</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">ScopedTypeVariables</span></span> #-}
+
+<span class="kw">module</span> Text.ProseDoc.Classifier <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Applicative</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.String</span> </span><span class="brace">(</span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Monoid</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Data</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Typeable</span> <span class="brace">(</span><span class="name">cast</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Generics.Schemes</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.SrcLoc</span></span>
+<span class="import"><span class="kw">import</span> <span class="kw">qualified</span> <span class="module-name">Language.Haskell.Exts.Annotated.Syntax</span> <span class="kw">as</span> <span class="module-name">S</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Tree</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Tree.Builder</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier.Types</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier.Tokens</span> </span><span class="brace">(</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>The <code>ASTClassifier</code> type class is used to process nodes in the annotated AST produced by <code>haskell-src-ext</code> and to build a <code>Tree</code> (covered later) of what are essentially tokens classified (or labeled) according to their context in the AST.</p>
+<p>The <code>mkTree</code> function of the type-class operates in the <code>TreeBuilder</code> monad (also covered later), which keeps track of the current source position and the lists of tokens and comments we haven't yet processed.</p></td><td class="code"><pre><code class="haskell"><span class="kw">class</span> <span class="name">ASTClassifier</span> <span class="name">ast</span> <span class="kw">where</span>
+    <span class="typesig"><span class="name">mkTree</span> <span class="syntax">::</span> <span class="type-name">ast</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+    <span class="name">mkTree</span> <span class="syntax">=</span> <span class="name">const</span> <span class="name">mempty</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>As a generic convenience, we define some helper instances so that we can process ast elements, tree builders and lists of the aforementionted in a consistent manner.</p></td><td class="code"><pre><code class="haskell"><span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span><span class="brace">)</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="syntax">=</span> <span class="name">id</span>
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="type-name">a</span> <span class="syntax">=&gt;</span> <span class="name">ASTClassifier</span> <span class="brace">[</span><span class="type-name">a</span><span class="brace">]</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="syntax">=</span> <span class="name">fmap</span> <span class="name">mconcat</span> <span class="infix-op">.</span> <span class="name">mapM</span> <span class="name">mkTree</span>
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="type-name">a</span> <span class="syntax">=&gt;</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="type-name">Maybe</span> <span class="type-name">a</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="constr-name">Nothing</span>  <span class="syntax">=</span> <span class="name">mempty</span>
+    <span class="name">mkTree</span> <span class="brace">(</span><span class="constr-name">Just</span> <span class="name">a</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">a</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>The root node of the AST is always the <code>Module</code>. By using the generic traversal scheme from <a href="http://hackage.haskell.org/packages/archive/syb/latest/doc/html/Data-Generics-Schemes.html"><code>Data.Generics.Schemes</code></a> we can avoid most of the trouble of having to write an instance for every single kind of AST node.</p>
+<p>If there are any source code fragments that were not processed by the generic traversal, we append them with <code>popRemaining</code>.</p></td><td class="code"><pre><code class="haskell"><span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">Module</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">m</span> <span class="syntax">=</span> <span class="name">mappend</span>
+        <span class="infix-op">&lt;$&gt;</span> <span class="name">everything</span> <span class="name">mappend</span> <span class="name">gTree</span> <span class="name">m</span>
+        <span class="infix-op">&lt;*&gt;</span> <span class="name">popRemaining</span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>gTree</code> takes advantage of the <code>Data.Data</code> instance of the AST elements and makes transformations throughout the tree. &quot;Leaf&quot; type nodes like names are processed using <code>popAst</code> and more complex elements delegate to the AST element's <code>ASTClassifier</code> type class instance.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">gTree</span> <span class="syntax">::</span> <span class="type-name">Data a <span class="syntax">=&gt;</span> a <span class="syntax">-&gt;</span> TreeBuilder <span class="brace">(</span>Tree Classifier Printable<span class="brace">)</span></span></span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="name">c</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">ModulePragma</span> <span class="type-name">SrcSpan</span><span class="brace">)</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="name">c</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">ImportDecl</span> <span class="type-name">SrcSpan</span><span class="brace">)</span><span class="brace">)</span>   <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="name">c</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">Type</span> <span class="type-name">SrcSpan</span><span class="brace">)</span><span class="brace">)</span>         <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="name">c</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">QName</span> <span class="type-name">SrcSpan</span><span class="brace">)</span><span class="brace">)</span>        <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="name">c</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">Name</span> <span class="type-name">SrcSpan</span><span class="brace">)</span><span class="brace">)</span>         <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="name">c</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">S.Con</span> <span class="brace">{</span><span class="brace">}</span><span class="brace">)</span><span class="brace">)</span>                  <span class="syntax">=</span> <span class="name">popAst'</span> <span class="constr-name">ConstrName</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="name">c</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">S.PApp</span> <span class="punct">_</span> <span class="name">qn</span> <span class="punct">_</span><span class="brace">)</span><span class="brace">)</span>             <span class="syntax">=</span> <span class="name">popAst'</span> <span class="constr-name">ConstrName</span> <span class="name">qn</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="name">c</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">S.PRec</span> <span class="punct">_</span> <span class="name">qn</span> <span class="punct">_</span><span class="brace">)</span><span class="brace">)</span>             <span class="syntax">=</span> <span class="name">popAst'</span> <span class="constr-name">ConstrName</span> <span class="name">qn</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="name">c</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">QOp</span> <span class="type-name">SrcSpan</span><span class="brace">)</span><span class="brace">)</span>          <span class="syntax">=</span> <span class="name">popAst'</span> <span class="constr-name">InfixOperator</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="name">c</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">S.String</span> <span class="brace">{</span><span class="brace">}</span><span class="brace">)</span><span class="brace">)</span>               <span class="syntax">=</span> <span class="name">popAst'</span> <span class="constr-name">StringLit</span> <span class="name">c</span>
+<span class="name">gTree</span> <span class="brace">(</span><span class="name">cast</span> <span class="syntax">-&gt;</span> <span class="constr-name">Just</span> <span class="name">c</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">S.TypeSig</span> <span class="name">l</span> <span class="name">names</span> <span class="name">typ</span><span class="brace">)</span><span class="brace">)</span>
+    <span class="syntax">=</span>  <span class="name">popPrintablesBefore</span> <span class="name">l</span>
+    <span class="infix-op">&lt;&gt;</span> <span class="name">label</span> <span class="constr-name">Signature</span> <span class="brace">(</span><span class="name">mkTree</span> <span class="name">names</span> <span class="infix-op">&lt;&gt;</span> <span class="name">mkTree</span> <span class="name">typ</span><span class="brace">)</span>
+<span class="name">gTree</span> <span class="punct">_</span> <span class="syntax">=</span> <span class="name">mempty</span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>label</code> is an short-hand function for adding a parent classifier to any value that is an <code>ASTClassifier</code> itself.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">label</span> <span class="syntax">::</span> <span class="type-name">ASTClassifier a
+    <span class="syntax">=&gt;</span> Classifier
+    <span class="syntax">-&gt;</span> a
+    <span class="syntax">-&gt;</span> TreeBuilder <span class="brace">(</span>Tree Classifier Printable<span class="brace">)</span></span></span>
+<span class="name">label</span> <span class="name">l</span> <span class="name">a</span> <span class="syntax">=</span> <span class="constr-name">Label</span> <span class="name">l</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">mkTree</span> <span class="name">a</span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>label'</code> is a variation of <code>label</code> which discards all labels from child trees. This is sometimes useful to prevent an element from gettings several redundant classifiers.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">label'</span> <span class="syntax">::</span> <span class="type-name">ASTClassifier a
+    <span class="syntax">=&gt;</span> Classifier
+    <span class="syntax">-&gt;</span> a
+    <span class="syntax">-&gt;</span> TreeBuilder <span class="brace">(</span>Tree Classifier Printable<span class="brace">)</span></span></span>
+<span class="name">label'</span> <span class="name">l</span> <span class="name">a</span> <span class="syntax">=</span> <span class="constr-name">Label</span> <span class="name">l</span> <span class="infix-op">.</span> <span class="name">pruneLabels</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">mkTree</span> <span class="name">a</span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>popAst</code> assigns the given label to the specified, annotated AST element and pops all code fragments within the AST element's <code>SrcSpan</code>.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popAst</span> <span class="syntax">::</span> <span class="type-name">S.Annotated ast
+    <span class="syntax">=&gt;</span> Classifier
+    <span class="syntax">-&gt;</span> ast SrcSpan
+    <span class="syntax">-&gt;</span> TreeBuilder <span class="brace">(</span>Tree Classifier Printable<span class="brace">)</span></span></span>
+<span class="name">popAst</span> <span class="name">cls</span> <span class="name">ast</span> <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span> <span class="infix-op">&lt;&gt;</span> <span class="name">label</span> <span class="name">cls</span> <span class="brace">(</span><span class="name">popPrintables</span> <span class="name">l</span><span class="brace">)</span>
+    <span class="kw">where</span> <span class="name">l</span> <span class="syntax">=</span> <span class="module-name">S</span><span class="name">.ann</span> <span class="name">ast</span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>popAst'</code> is a version of <code>popAst</code> which prunes any nested labels.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popAst'</span> <span class="syntax">::</span> <span class="type-name">S.Annotated ast
+    <span class="syntax">=&gt;</span> Classifier
+    <span class="syntax">-&gt;</span> ast SrcSpan
+    <span class="syntax">-&gt;</span> TreeBuilder <span class="brace">(</span>Tree Classifier Printable<span class="brace">)</span></span></span>
+<span class="name">popAst'</span> <span class="name">cls</span> <span class="name">ast</span> <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span> <span class="infix-op">&lt;&gt;</span> <span class="name">label'</span> <span class="name">cls</span> <span class="brace">(</span><span class="name">popPrintables</span> <span class="name">l</span><span class="brace">)</span>
+    <span class="kw">where</span> <span class="name">l</span> <span class="syntax">=</span> <span class="module-name">S</span><span class="name">.ann</span> <span class="name">ast</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>The rest of the module consists of <code>ASTClassifier</code> instances for AST nodes for which we want to do some specific processing i.e. assign specific labels to some children of the node which cannot be accurately identified just based on their type (in which case we could process them in <code>gTree</code>).</p>
+<p>This part of the syntax highlighter is still work-in-progress. We need more <code>ASTClassifier</code> instances to add rest of the syntax coloring.</p></td><td class="code"><pre><code class="haskell"><span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">ModulePragma</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">p</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">p</span> <span class="kw">of</span>
+        <span class="constr-name">S.LanguagePragma</span> <span class="name">l</span> <span class="name">names</span> <span class="syntax">-&gt;</span>
+            <span class="name">popPrintablesBefore</span> <span class="name">l</span>
+            <span class="infix-op">&lt;&gt;</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="constr-name">ModulePragma</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">mkTree</span> <span class="name">names</span><span class="brace">)</span>
+        <span class="constr-name">S.OptionsPragma</span> <span class="name">l</span> <span class="punct">_</span> <span class="punct">_</span> <span class="syntax">-&gt;</span>
+            <span class="name">popPrintablesBefore</span> <span class="name">l</span>
+            <span class="infix-op">&lt;&gt;</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="constr-name">ModulePragma</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">popPrintables</span> <span class="name">l</span><span class="brace">)</span>
+        <span class="constr-name">S.AnnModulePragma</span> <span class="name">l</span> <span class="punct">_</span> <span class="syntax">-&gt;</span>
+            <span class="name">popPrintablesBefore</span> <span class="name">l</span>
+            <span class="infix-op">&lt;&gt;</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="constr-name">ModulePragma</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">popPrintables</span> <span class="name">l</span><span class="brace">)</span>
+
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">ImportDecl</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">i</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">S.ImportDecl</span><span class="brace">{</span><span class="punct">..</span><span class="brace">}</span><span class="brace">)</span>
+        <span class="syntax">=</span>  <span class="name">popPrintablesBefore</span> <span class="name">importAnn</span>
+        <span class="infix-op">&lt;&gt;</span> <span class="name">label</span> <span class="constr-name">ImportDecl</span>
+        <span class="brace">(</span>  <span class="name">mkTree</span> <span class="name">importModule</span>
+        <span class="infix-op">&lt;&gt;</span> <span class="name">mkTree</span> <span class="name">importAs</span>
+        <span class="infix-op">&lt;&gt;</span> <span class="name">mkTree</span> <span class="name">importSpecs</span>
+        <span class="brace">)</span>
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">ImportSpecList</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">d</span>
+        <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span>
+        <span class="infix-op">&lt;&gt;</span> <span class="name">everything</span> <span class="name">mappend</span> <span class="name">gTree</span> <span class="name">d</span>
+        <span class="kw">where</span> <span class="name">l</span> <span class="syntax">=</span> <span class="module-name">S</span><span class="name">.ann</span> <span class="name">d</span>
+
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">ModuleName</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="brace">(</span><span class="constr-name">S.ModuleName</span> <span class="name">l'</span> <span class="name">s</span><span class="brace">)</span>
+        <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span>
+        <span class="infix-op">&lt;&gt;</span> <span class="name">label</span> <span class="constr-name">ModuleName</span> <span class="brace">(</span><span class="name">popPrintables</span> <span class="name">l</span><span class="brace">)</span>
+        <span class="kw">where</span>
+            <span class="comment">-- ModuleName has invalid span length, so recalculate it from</span>
+            <span class="comment">-- the actual name.</span>
+            <span class="constr-name">SrcSpan</span> <span class="brace">{</span><span class="punct">..</span><span class="brace">}</span> <span class="syntax">=</span> <span class="name">l'</span>
+            <span class="name">l</span> <span class="syntax">=</span> <span class="name">l'</span> <span class="brace">{</span> <span class="name">srcSpanEndColumn</span> <span class="syntax">=</span> <span class="name">srcSpanStartColumn</span> <span class="infix-op">+</span> <span class="name">length</span> <span class="name">s</span> <span class="brace">}</span>
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">Name</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">n</span> <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span> <span class="infix-op">&lt;&gt;</span> <span class="name">label</span> <span class="constr-name">Name</span> <span class="brace">(</span><span class="name">popPrintables</span> <span class="name">l</span><span class="brace">)</span>
+        <span class="kw">where</span> <span class="name">l</span> <span class="syntax">=</span> <span class="module-name">S</span><span class="name">.ann</span> <span class="name">n</span>
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">Type</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">n</span> <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span> <span class="infix-op">&lt;&gt;</span> <span class="kw">case</span> <span class="name">n</span> <span class="kw">of</span>
+        <span class="constr-name">S.TyFun</span> <span class="punct">_</span> <span class="name">a</span> <span class="name">b</span> <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">a</span> <span class="infix-op">&lt;&gt;</span> <span class="name">mkTree</span> <span class="name">b</span>
+        <span class="constr-name">S.TyApp</span> <span class="punct">_</span> <span class="name">a</span> <span class="name">b</span> <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">a</span> <span class="infix-op">&lt;&gt;</span> <span class="name">mkTree</span> <span class="name">b</span>
+        <span class="constr-name">S.TyList</span> <span class="punct">_</span> <span class="name">a</span>  <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">a</span>
+        <span class="constr-name">S.TyTuple</span> <span class="punct">_</span> <span class="punct">_</span> <span class="name">a</span> <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">a</span>
+        <span class="constr-name">S.TyParen</span> <span class="punct">_</span> <span class="name">a</span> <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">a</span>
+        <span class="constr-name">S.TyCon</span> <span class="punct">_</span> <span class="brace">(</span><span class="constr-name">S.Qual</span> <span class="punct">_</span> <span class="name">m</span> <span class="name">n</span><span class="brace">)</span>
+            <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">m</span>
+            <span class="infix-op">&lt;&gt;</span> <span class="kw">do</span>
+                <span class="name">within</span> <span class="syntax">&lt;-</span> <span class="name">currentlyWithin</span> <span class="name">l</span>
+                <span class="comment">-- Pop the dot in the qualified name separately</span>
+                <span class="kw">if</span> <span class="name">within</span>
+                    <span class="kw">then</span> <span class="name">popCustom</span> <span class="constr-name">Punctuation</span> 1
+                    <span class="kw">else</span> <span class="name">mempty</span>
+            <span class="infix-op">&lt;&gt;</span> <span class="name">label'</span> <span class="constr-name">TypeName</span> <span class="brace">(</span><span class="name">mkTree</span> <span class="name">n</span><span class="brace">)</span>
+        <span class="punct">_</span> <span class="syntax">-&gt;</span> <span class="name">label</span> <span class="constr-name">TypeName</span> <span class="infix-op">$</span> <span class="name">popPrintables</span> <span class="name">l</span>
+        <span class="kw">where</span> <span class="name">l</span> <span class="syntax">=</span> <span class="module-name">S</span><span class="name">.ann</span> <span class="name">n</span>
+
+<span class="kw">instance</span> <span class="name">ASTClassifier</span> <span class="brace">(</span><span class="module-name">S</span><span class="punct">.</span><span class="type-name">QName</span> <span class="type-name">SrcSpan</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mkTree</span> <span class="name">n</span> <span class="syntax">=</span> <span class="name">popPrintablesBefore</span> <span class="name">l</span> <span class="infix-op">&lt;&gt;</span> <span class="kw">case</span> <span class="name">n</span> <span class="kw">of</span>
+        <span class="constr-name">S.Qual</span> <span class="punct">_</span> <span class="name">m</span> <span class="name">n</span> <span class="syntax">-&gt;</span> <span class="name">mkTree</span> <span class="name">m</span> <span class="infix-op">&lt;&gt;</span> <span class="name">mkTree</span> <span class="name">n</span>
+        <span class="punct">_</span> <span class="syntax">-&gt;</span> <span class="name">label</span> <span class="constr-name">Name</span> <span class="infix-op">$</span> <span class="name">popPrintables</span> <span class="name">l</span>
+        <span class="kw">where</span> <span class="name">l</span> <span class="syntax">=</span> <span class="module-name">S</span><span class="name">.ann</span> <span class="name">n</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Classifier.Tokens"></a></td><td><code>Text/ProseDoc/Classifier/Tokens.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"><h2 id="token-classification">Token Classification</h2>
+<p>Whereas <a href="#Test.ProseDoc.Classifier"><code>Text.ProseDoc.Classifier</code></a> classifies source fragments based on the AST, the <code>Tokens</code> sub-module assigns classifications based on <code>Tokens</code> that are returned by <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html#v:lexTokenStream"><code>lexTokenStream</code></a> in <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Lexer.html"><code>Language.Haskell.Exts.Lexer</code></a>.</p>
+<p>This module also handles <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/latest/doc/html/Language-Haskell-Exts-Comments.html#t:Comment"><code>Comment</code></a> values that we get as a side-product of parsing the AST.</p></td><td class="code"><pre><code class="haskell"><span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">FlexibleInstances</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">RecordWildCards</span></span> #-}
+
+<span class="kw">module</span> Text.ProseDoc.Classifier.Tokens <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.Lexer</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.SrcLoc</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.Comments</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier.Types</span></span>
+
+<span class="kw">instance</span> <span class="name">SourceFragment</span> <span class="brace">(</span><span class="type-name">Loc</span> <span class="type-name">Token</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">toFragments</span> <span class="name">lt</span>
+        <span class="syntax">|</span> <span class="name">cls</span> <span class="infix-op">==</span> <span class="constr-name">Pragma</span>
+</code></pre></td></tr><tr><td class="prose"><p>We do a little bit of manual tweaking for <code>Pragma</code> tokens because the pragma starting token includes both the opening comment bracket and the pragma name.</p></td><td class="code"><pre><code class="haskell">            <span class="syntax">=</span> <span class="brace">(</span><span class="name">pos</span> <span class="infix-op">`setLen`</span> 3<span class="punct">,</span> <span class="constr-name">Punctuation</span><span class="brace">)</span>
+            <span class="infix-op">:</span> <span class="brace">(</span><span class="name">pos</span> <span class="infix-op">`moveCol`</span> 3<span class="punct">,</span> <span class="constr-name">Pragma</span><span class="brace">)</span>
+            <span class="infix-op">:</span> <span class="brace">[</span><span class="brace">]</span>
+        <span class="syntax">|</span> <span class="name">otherwise</span>     <span class="syntax">=</span> <span class="brace">(</span><span class="name">pos</span><span class="punct">,</span> <span class="name">cls</span><span class="brace">)</span> <span class="infix-op">:</span> <span class="brace">[</span><span class="brace">]</span>
+        <span class="kw">where</span>
+            <span class="name">pos</span>   <span class="syntax">=</span> <span class="name">loc</span> <span class="name">lt</span>
+            <span class="name">token</span> <span class="syntax">=</span> <span class="name">unLoc</span> <span class="name">lt</span>
+            <span class="name">cls</span>   <span class="syntax">=</span> <span class="name">classifyToken</span> <span class="name">token</span>
+            <span class="name">moveCol</span> <span class="name">src</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">SrcSpan</span> <span class="brace">{</span><span class="punct">..</span><span class="brace">}</span><span class="brace">)</span> <span class="name">delta</span> <span class="syntax">=</span> <span class="name">src</span>
+                <span class="brace">{</span> <span class="name">srcSpanStartColumn</span>  <span class="syntax">=</span> <span class="name">srcSpanStartColumn</span> <span class="infix-op">+</span> <span class="name">delta</span> <span class="brace">}</span>
+            <span class="name">setLen</span>  <span class="name">src</span><span class="syntax">@</span><span class="brace">(</span><span class="constr-name">SrcSpan</span> <span class="brace">{</span><span class="punct">..</span><span class="brace">}</span><span class="brace">)</span> <span class="name">len</span> <span class="syntax">=</span> <span class="name">src</span>
+                <span class="brace">{</span> <span class="name">srcSpanEndColumn</span> <span class="syntax">=</span> <span class="name">srcSpanStartColumn</span> <span class="infix-op">+</span> <span class="name">len</span> <span class="brace">}</span>
+
+<span class="kw">instance</span> <span class="name">SourceFragment</span> <span class="type-name">Comment</span> <span class="kw">where</span>
+    <span class="name">toFragments</span> <span class="brace">(</span><span class="constr-name">Comment</span> <span class="name">block</span> <span class="name">loc</span> <span class="name">txt</span><span class="brace">)</span> <span class="syntax">=</span> <span class="brace">(</span><span class="name">loc'</span><span class="punct">,</span> <span class="name">comment</span><span class="brace">)</span> <span class="infix-op">:</span> <span class="brace">[</span><span class="brace">]</span> <span class="kw">where</span>
+</code></pre></td></tr><tr><td class="prose"><p>Block comments that start with the character '%' are classified as &quot;prose&quot; and they get lifted out of the source in a later phase. All other comments are retained in the source as-is.</p></td><td class="code"><pre><code class="haskell">        <span class="name">loc'</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">txt</span> <span class="kw">of</span>
+            '%'<span class="name"><span class="syntax">:</span></span><span class="punct">_</span> <span class="syntax">-&gt;</span> <span class="name">loc</span>
+</code></pre></td></tr><tr><td class="prose"><p>Prose comments must start and end with a newline. The extra lines are pruned here to avoid extra gaps in the source code.</p></td><td class="code"><pre><code class="haskell">                <span class="brace">{</span> <span class="name">srcSpanStartColumn</span> <span class="syntax">=</span> 1
+                <span class="punct">,</span> <span class="name">srcSpanEndColumn</span>   <span class="syntax">=</span> 1
+                <span class="punct">,</span> <span class="name">srcSpanEndLine</span>     <span class="syntax">=</span> <span class="name">srcSpanEndLine</span> <span class="infix-op">+</span> 1
+                <span class="brace">}</span>
+            <span class="punct">_</span> <span class="syntax">-&gt;</span> <span class="name">loc</span>
+
+        <span class="constr-name">SrcSpan</span> <span class="brace">{</span><span class="punct">..</span><span class="brace">}</span> <span class="syntax">=</span> <span class="name">loc</span>
+        <span class="name">comment</span>
+            <span class="syntax">|</span> <span class="name">block</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">txt</span> <span class="kw">of</span>
+                '%'<span class="name"><span class="syntax">:</span></span><span class="name">prose</span>     <span class="syntax">-&gt;</span> <span class="constr-name">ProseComment</span> <span class="name">prose</span>
+                <span class="punct">_</span>             <span class="syntax">-&gt;</span> <span class="constr-name">BlockComment</span>
+            <span class="syntax">|</span> <span class="name">otherwise</span> <span class="syntax">=</span> <span class="constr-name">LineComment</span>
+
+<span class="typesig"><span class="name">classifyToken</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Classifier</span></span>
+<span class="name">classifyToken</span> <span class="name">t</span>
+    <span class="syntax">|</span> <span class="name">braces</span> <span class="name">t</span>              <span class="syntax">=</span> <span class="constr-name">Braces</span>
+    <span class="syntax">|</span> <span class="name">specialPunctuation</span> <span class="name">t</span>  <span class="syntax">=</span> <span class="constr-name">SpecPunctuation</span>
+    <span class="syntax">|</span> <span class="name">punctuation</span> <span class="name">t</span>         <span class="syntax">=</span> <span class="constr-name">Punctuation</span>
+    <span class="syntax">|</span> <span class="name">keyword</span> <span class="name">t</span>             <span class="syntax">=</span> <span class="constr-name">Keyword</span>
+    <span class="syntax">|</span> <span class="name">pragma</span> <span class="name">t</span>              <span class="syntax">=</span> <span class="constr-name">Pragma</span>
+    <span class="syntax">|</span> <span class="name">thQuote</span> <span class="name">t</span>             <span class="syntax">=</span> <span class="constr-name">THQuote</span>
+    <span class="syntax">|</span> <span class="name">thEscape</span> <span class="name">t</span>            <span class="syntax">=</span> <span class="constr-name">THEscape</span>
+    <span class="syntax">|</span> <span class="name">thQuasiQuote</span> <span class="name">t</span>        <span class="syntax">=</span> <span class="constr-name">QuasiQuote</span>
+    <span class="syntax">|</span> <span class="name">otherwise</span>             <span class="syntax">=</span> <span class="constr-name">Other</span>
+
+<span class="typesig"><span class="name">thQuote</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">thQuote</span> <span class="syntax">=</span> <span class="name">flip</span> <span class="name">elem</span>
+    <span class="brace">[</span> <span class="constr-name">THExpQuote</span>
+    <span class="punct">,</span> <span class="constr-name">THPatQuote</span>
+    <span class="punct">,</span> <span class="constr-name">THDecQuote</span>
+    <span class="punct">,</span> <span class="constr-name">THTypQuote</span>
+    <span class="punct">,</span> <span class="constr-name">THCloseQuote</span>
+    <span class="punct">,</span> <span class="constr-name">THVarQuote</span>
+    <span class="punct">,</span> <span class="constr-name">THTyQuote</span>
+    <span class="brace">]</span>
+
+<span class="typesig"><span class="name">thEscape</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">thEscape</span> <span class="brace">(</span><span class="constr-name">THIdEscape</span> <span class="punct">_</span><span class="brace">)</span> <span class="syntax">=</span> <span class="constr-name">True</span>
+<span class="name">thEscape</span> <span class="constr-name">THParenEscape</span>  <span class="syntax">=</span> <span class="constr-name">True</span>
+<span class="name">thEscape</span> <span class="punct">_</span> <span class="syntax">=</span> <span class="constr-name">False</span>
+
+<span class="typesig"><span class="name">thQuasiQuote</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">thQuasiQuote</span> <span class="brace">(</span><span class="constr-name">THQuasiQuote</span> <span class="punct">_</span><span class="brace">)</span> <span class="syntax">=</span> <span class="constr-name">True</span>
+<span class="name">thQuasiQuote</span> <span class="punct">_</span> <span class="syntax">=</span> <span class="constr-name">False</span>
+
+<span class="typesig"><span class="name">braces</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">braces</span> <span class="syntax">=</span> <span class="name">flip</span> <span class="name">elem</span>
+    <span class="brace">[</span> <span class="constr-name">LeftParen</span>
+    <span class="punct">,</span> <span class="constr-name">RightParen</span>
+    <span class="punct">,</span> <span class="constr-name">LeftHashParen</span>
+    <span class="punct">,</span> <span class="constr-name">RightHashParen</span>
+    <span class="punct">,</span> <span class="constr-name">LeftCurlyBar</span>
+    <span class="punct">,</span> <span class="constr-name">RightCurlyBar</span>
+    <span class="punct">,</span> <span class="constr-name">LeftCurly</span>
+    <span class="punct">,</span> <span class="constr-name">RightCurly</span>
+    <span class="punct">,</span> <span class="constr-name">VRightCurly</span>
+    <span class="punct">,</span> <span class="constr-name">LeftSquare</span>
+    <span class="punct">,</span> <span class="constr-name">RightSquare</span>
+    <span class="brace">]</span>
+
+<span class="typesig"><span class="name">specialPunctuation</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">specialPunctuation</span> <span class="syntax">=</span> <span class="name">flip</span> <span class="name">elem</span>
+    <span class="brace">[</span> <span class="constr-name">BackQuote</span>
+    <span class="punct">,</span> <span class="constr-name">Colon</span>
+    <span class="punct">,</span> <span class="constr-name">DoubleColon</span>
+    <span class="punct">,</span> <span class="constr-name">Equals</span>
+    <span class="punct">,</span> <span class="constr-name">Backslash</span>
+    <span class="punct">,</span> <span class="constr-name">Bar</span>
+    <span class="punct">,</span> <span class="constr-name">LeftArrow</span>
+    <span class="punct">,</span> <span class="constr-name">RightArrow</span>
+    <span class="punct">,</span> <span class="constr-name">At</span>
+    <span class="punct">,</span> <span class="constr-name">Tilde</span>
+    <span class="punct">,</span> <span class="constr-name">DoubleArrow</span>
+    <span class="punct">,</span> <span class="constr-name">Minus</span>
+    <span class="punct">,</span> <span class="constr-name">Exclamation</span>
+    <span class="punct">,</span> <span class="constr-name">Star</span>
+    <span class="punct">,</span> <span class="constr-name">LeftArrowTail</span>
+    <span class="punct">,</span> <span class="constr-name">RightArrowTail</span>
+    <span class="punct">,</span> <span class="constr-name">LeftDblArrowTail</span>
+    <span class="punct">,</span> <span class="constr-name">RightDblArrowTail</span>
+    <span class="brace">]</span>
+
+<span class="typesig"><span class="name">punctuation</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">punctuation</span> <span class="syntax">=</span> <span class="name">flip</span> <span class="name">elem</span>
+    <span class="brace">[</span> <span class="constr-name">SemiColon</span>
+    <span class="punct">,</span> <span class="constr-name">Comma</span>
+    <span class="punct">,</span> <span class="constr-name">Underscore</span>
+    <span class="punct">,</span> <span class="constr-name">Dot</span>
+    <span class="punct">,</span> <span class="constr-name">DotDot</span>
+    <span class="brace">]</span>
+
+<span class="typesig"><span class="name">pragma</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">pragma</span> <span class="name">t</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">t</span> <span class="kw">of</span>
+    <span class="constr-name">RULES</span>               <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">INLINE</span> <span class="punct">_</span>            <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">INLINE_CONLIKE</span>      <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">SPECIALISE</span>          <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">SPECIALISE_INLINE</span> <span class="punct">_</span> <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">SOURCE</span>              <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">DEPRECATED</span>          <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">WARNING</span>             <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">SCC</span>                 <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">GENERATED</span>           <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">CORE</span>                <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">UNPACK</span>              <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">OPTIONS</span> <span class="punct">_</span>           <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">LANGUAGE</span>            <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="constr-name">ANN</span>                 <span class="syntax">-&gt;</span> <span class="constr-name">True</span>
+    <span class="punct">_</span>                   <span class="syntax">-&gt;</span> <span class="constr-name">False</span>
+
+<span class="typesig"><span class="name">keyword</span> <span class="syntax">::</span> <span class="type-name">Token</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">keyword</span> <span class="syntax">=</span> <span class="name">flip</span> <span class="name">elem</span>
+    <span class="brace">[</span> <span class="constr-name">KW_As</span>
+    <span class="punct">,</span> <span class="constr-name">KW_By</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Case</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Class</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Data</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Default</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Deriving</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Do</span>
+    <span class="punct">,</span> <span class="constr-name">KW_MDo</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Else</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Family</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Forall</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Group</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Hiding</span>
+    <span class="punct">,</span> <span class="constr-name">KW_If</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Import</span>
+    <span class="punct">,</span> <span class="constr-name">KW_In</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Infix</span>
+    <span class="punct">,</span> <span class="constr-name">KW_InfixL</span>
+    <span class="punct">,</span> <span class="constr-name">KW_InfixR</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Instance</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Let</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Module</span>
+    <span class="punct">,</span> <span class="constr-name">KW_NewType</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Of</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Proc</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Rec</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Then</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Type</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Using</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Where</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Qualified</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Foreign</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Export</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Safe</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Unsafe</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Threadsafe</span>
+    <span class="punct">,</span> <span class="constr-name">KW_StdCall</span>
+    <span class="punct">,</span> <span class="constr-name">KW_CCall</span>
+    <span class="punct">,</span> <span class="constr-name">KW_CPlusPlus</span>
+    <span class="punct">,</span> <span class="constr-name">KW_DotNet</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Jvm</span>
+    <span class="punct">,</span> <span class="constr-name">KW_Js</span>
+    <span class="brace">]</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Classifier.Types"></a></td><td><code>Text/ProseDoc/Classifier/Types.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+<span class="kw">module</span> Text.ProseDoc.Classifier.Types <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.SrcLoc</span></span>
+
+<span class="kw">data</span> <span class="name">Classifier</span>
+    <span class="syntax">=</span> <span class="name">ModuleHead</span>
+    <span class="syntax">|</span> <span class="name">ModulePragma</span>
+    <span class="syntax">|</span> <span class="name">ImportDecl</span>
+    <span class="syntax">|</span> <span class="name">ModuleName</span>
+    <span class="syntax">|</span> <span class="name">ValueName</span>
+    <span class="syntax">|</span> <span class="name">ConstrName</span>
+    <span class="syntax">|</span> <span class="name">TypeName</span>
+    <span class="syntax">|</span> <span class="name">Pragma</span>
+    <span class="syntax">|</span> <span class="name">Name</span>
+    <span class="syntax">|</span> <span class="name">Keyword</span>
+    <span class="syntax">|</span> <span class="name">Punctuation</span>
+    <span class="syntax">|</span> <span class="name">SpecPunctuation</span>
+    <span class="syntax">|</span> <span class="name">Braces</span>
+    <span class="syntax">|</span> <span class="name">QuasiQuote</span>
+    <span class="syntax">|</span> <span class="name">THQuote</span>
+    <span class="syntax">|</span> <span class="name">THEscape</span>
+    <span class="syntax">|</span> <span class="name">Other</span>
+    <span class="syntax">|</span> <span class="name">BlockComment</span>
+    <span class="syntax">|</span> <span class="name">LineComment</span>
+    <span class="syntax">|</span> <span class="name">ProseComment</span> <span class="type-name">String</span>
+    <span class="syntax">|</span> <span class="name">Signature</span>
+    <span class="syntax">|</span> <span class="name">InfixOperator</span>
+    <span class="syntax">|</span> <span class="name">StringLit</span>
+    <span class="kw">deriving</span> <span class="brace">(</span><span class="name">Show</span><span class="punct">,</span> <span class="name">Eq</span><span class="punct">,</span> <span class="name">Ord</span><span class="brace">)</span>
+
+<span class="kw">type</span> <span class="name">LineNo</span> <span class="syntax">=</span> <span class="type-name">Int</span>
+<span class="kw">type</span> <span class="name">Column</span> <span class="syntax">=</span> <span class="type-name">Int</span>
+<span class="kw">type</span> <span class="name">Pos</span> <span class="syntax">=</span> <span class="brace">(</span><span class="type-name">LineNo</span><span class="punct">,</span> <span class="type-name">Column</span><span class="brace">)</span>
+
+<span class="kw">type</span> <span class="name">Printable</span> <span class="syntax">=</span> <span class="type-name">String</span>
+<span class="kw">type</span> <span class="name">Fragment</span>  <span class="syntax">=</span> <span class="brace">(</span><span class="type-name">SrcSpan</span><span class="punct">,</span> <span class="type-name">Classifier</span><span class="brace">)</span>
+
+<span class="kw">class</span> <span class="name">SourceFragment</span> <span class="name">f</span> <span class="kw">where</span>
+    <span class="typesig"><span class="name">toFragments</span> <span class="syntax">::</span> <span class="type-name">f</span> <span class="syntax">-&gt;</span> <span class="brace">[</span><span class="type-name">Fragment</span></span><span class="brace">]</span>
+
+<span class="typesig"><span class="name">isProse</span> <span class="syntax">::</span> <span class="type-name">Classifier</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span></span>
+<span class="name">isProse</span> <span class="brace">(</span><span class="constr-name">ProseComment</span> <span class="punct">_</span><span class="brace">)</span> <span class="syntax">=</span> <span class="constr-name">True</span>
+<span class="name">isProse</span> <span class="punct">_</span> <span class="syntax">=</span> <span class="constr-name">False</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Parser"></a></td><td><code>Text/ProseDoc/Parser.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"><h2 id="parsing-haskell-source">Parsing Haskell Source</h2>
+<p>Haskell modules are parsed using <a href="http://hackage.haskell.org/packages/archive/haskell-src-exts/1.13.5/doc/html/Language-Haskell-Exts-Parser.html"><code>Language.Haskell.Exts.Parser</code></a> and the tokens, comments and AST is fed to a <code>TreeBuilder</code> (see <a href="#Text.ProseDoc.Tree.Builder"><code>Text.ProseDoc.Tree.Builder</code></a>).</p></td><td class="code"><pre><code class="haskell"><span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">ScopedTypeVariables</span></span> #-}
+
+<span class="kw">module</span> Text.ProseDoc.Parser <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Applicative</span> <span class="brace">(</span><span class="name"><span class="brace">(</span>&lt;$&gt;<span class="brace">)</span></span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Error</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.List</span> <span class="brace">(</span><span class="name">sort</span></span><span class="brace">)</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts</span> <span class="brace">(</span><span class="name">readExtensions</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.Lexer</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.Parser</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.SrcLoc</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.Pretty</span> <span class="brace">(</span><span class="name">prettyPrint</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="kw">qualified</span> <span class="module-name">Language.Haskell.Exts.Annotated.Syntax</span> <span class="kw">as</span> <span class="module-name">S</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Tree</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Tree.Builder</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier.Types</span></span>
+
+<span class="typesig"><span class="name">parseSourceFile</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">EitherT</span> <span class="type-name">String</span> <span class="type-name">IO</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">parseSourceFile</span> <span class="name">fp</span> <span class="syntax">=</span> <span class="kw">do</span>
+    <span class="name">src</span>  <span class="syntax">&lt;-</span> <span class="name">scriptIO</span> <span class="infix-op">$</span> <span class="name">readFile</span> <span class="name">fp</span>
+    <span class="name">hoistEither</span> <span class="infix-op">$</span> <span class="name">buildTree</span> <span class="name">fp</span> <span class="name">src</span>
+
+<span class="typesig"><span class="name">buildTree</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">String</span> <span class="syntax">-&gt;</span> <span class="type-name">Either</span> <span class="type-name">String</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">buildTree</span> <span class="name">path</span> <span class="name">src</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">parseResult</span> <span class="infix-op">.</span> <span class="name">parseMode</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">readExtensions</span> <span class="name">src</span> <span class="kw">of</span>
+    <span class="constr-name">Nothing</span>                    <span class="syntax">-&gt;</span> <span class="constr-name">Left</span> <span class="lit string">&quot;unable to parse language extensions&quot;</span>
+    <span class="constr-name">Just</span> <span class="brace">(</span><span class="constr-name">ParseOk</span> <span class="name">r</span><span class="brace">)</span>           <span class="syntax">-&gt;</span> <span class="name">return</span> <span class="name">r</span>
+    <span class="constr-name">Just</span> <span class="brace">(</span><span class="constr-name">ParseFailed</span> <span class="name">loc</span> <span class="name">msg</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="constr-name">Left</span> <span class="brace">(</span><span class="name">prettyPrint</span> <span class="name">loc</span> <span class="infix-op">++</span> <span class="lit string">&quot;: &quot;</span> <span class="infix-op">++</span> <span class="name">msg</span><span class="brace">)</span>
+
+    <span class="kw">where</span>
+        <span class="name">parseResult</span> <span class="name">mode</span> <span class="syntax">=</span> <span class="kw">do</span>
+            <span class="name">tokens</span> <span class="syntax">&lt;-</span> <span class="name">lexTokenStreamWithMode</span> <span class="name">mode</span> <span class="name">src</span>
+            <span class="brace">(</span><span class="name">ast</span> <span class="syntax">::</span> <span class="module-name">S</span><span class="punct">.</span><span class="type-name">Module</span> <span class="type-name">SrcSpan</span><span class="punct">,</span> <span class="name">comments</span><span class="brace">)</span> <span class="syntax">&lt;-</span> <span class="name">parseWithComments</span> <span class="name">mode</span> <span class="name">src</span>
+
+            <span class="kw">let</span> <span class="name">builder</span>   <span class="syntax">=</span> <span class="name">mkTree</span> <span class="name">ast</span>
+                <span class="name">tree</span>      <span class="syntax">=</span> <span class="name">runTreeBuilder</span> <span class="name">builder</span> <span class="name">src</span> <span class="name">fragments</span>
+                <span class="name">fragments</span>
+                    <span class="syntax">=</span>  <span class="name">sort</span>
+                    <span class="infix-op">$</span>  <span class="name">concatMap</span> <span class="name">toFragments</span> <span class="name">tokens</span>
+                    <span class="infix-op">++</span> <span class="name">concatMap</span> <span class="name">toFragments</span> <span class="name">comments</span>
+
+            <span class="name">return</span> <span class="name">tree</span>
+
+        <span class="name">parseMode</span> <span class="name">exts</span> <span class="syntax">=</span> <span class="name">defaultParseMode</span>
+            <span class="brace">{</span> <span class="name">parseFilename</span> <span class="syntax">=</span> <span class="name">path</span>
+            <span class="punct">,</span> <span class="name">fixities</span> <span class="syntax">=</span> <span class="constr-name">Just</span> <span class="brace">[</span><span class="brace">]</span>
+            <span class="punct">,</span> <span class="name">extensions</span> <span class="syntax">=</span> <span class="name">exts</span>
+            <span class="brace">}</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Rendering"></a></td><td><code>Text/ProseDoc/Rendering.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"><h2 id="rendering-to-html">Rendering to HTML</h2></td><td class="code"><pre><code class="haskell"><span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">RecordWildCards</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">OverloadedStrings</span></span> #-}
+
+<span class="kw">module</span> Text.ProseDoc.Rendering <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Monad.State</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Applicative</span> <span class="brace">(</span><span class="name"><span class="brace">(</span>&lt;$&gt;<span class="brace">)</span></span><span class="punct">,</span><span class="name"><span class="brace">(</span>&lt;*&gt;<span class="brace">)</span></span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Arrow</span> <span class="brace">(</span><span class="name"><span class="brace">(</span>&amp;&amp;&amp;<span class="brace">)</span></span></span><span class="brace">)</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Monoid</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.String</span> <span class="brace">(</span><span class="name">fromString</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.List</span>   <span class="brace">(</span><span class="name">isPrefixOf</span><span class="punct">,</span> <span class="name">stripPrefix</span><span class="punct">,</span> <span class="name">intercalate</span></span><span class="brace">)</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Blaze.Html5</span> <span class="brace">(</span><span class="name"><span class="brace">(</span><span class="syntax">!</span><span class="brace">)</span></span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Blaze.Extra</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Blaze.Renderer.String</span></span>
+<span class="import"><span class="kw">import</span> <span class="kw">qualified</span> <span class="module-name">Text.Blaze.Html5</span> <span class="kw">as</span> <span class="module-name">H</span></span>
+<span class="import"><span class="kw">import</span> <span class="kw">qualified</span> <span class="module-name">Text.Blaze.Html5.Attributes</span> <span class="kw">as</span> <span class="module-name">A</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Pandoc.Readers.Markdown</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Pandoc.Writers.HTML</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Pandoc.Parsing</span> <span class="brace">(</span><span class="name">defaultParserState</span></span><span class="brace">)</span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.Pandoc.Shared</span> <span class="brace">(</span><span class="name">defaultWriterOptions</span></span><span class="brace">)</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Tree</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier.Types</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">System.FilePath</span></span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>htmlTOC</code> builds a hierarchical &lt;ul&gt; tree from a list of filenames so that files that are in the same directory are placed as siblings in the tree.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">htmlTOC</span> <span class="syntax">::</span> <span class="brace">[</span><span class="type-name">FilePath</span><span class="brace">]</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span></span>
+<span class="name">htmlTOC</span> <span class="syntax">=</span> <span class="brace">(</span><span class="module-name">H</span><span class="name">.ul</span> <span class="infix-op">!.</span> <span class="lit string">&quot;toc&quot;</span><span class="brace">)</span> <span class="infix-op">.</span> <span class="name">evalState</span> <span class="brace">(</span><span class="name">go</span> <span class="brace">[</span><span class="brace">]</span><span class="brace">)</span> <span class="infix-op">.</span> <span class="name">idify</span>  <span class="kw">where</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>The internal implementation is rather hairy (there has to be a simpler way to do this!). We maintain the list of remaining filenames in the <code>State</code> monad and pop them out one by one when we are a the appropriate level of the tree.</p>
+<p>We use two mutually recursive functions <code>go</code> and <code>go2</code>.</p>
+<p><code>go</code> processes module names from the stack until it hits a name that doesn't match the current module prefix.</p></td><td class="code"><pre><code class="haskell">    <span class="name">go</span> <span class="name">prefix</span> <span class="syntax">=</span> <span class="kw">do</span>
+        <span class="name">paths</span> <span class="syntax">&lt;-</span> <span class="name">get</span>
+        <span class="kw">case</span> <span class="name">paths</span> <span class="kw">of</span>
+            <span class="brace">[</span><span class="brace">]</span>       <span class="syntax">-&gt;</span> <span class="name">return</span> <span class="name">mempty</span>
+            <span class="brace">(</span><span class="brace">(</span><span class="name">fp</span><span class="punct">,</span><span class="name">anchor</span><span class="brace">)</span><span class="name"><span class="syntax">:</span></span><span class="name">fps</span><span class="brace">)</span>  <span class="syntax">-&gt;</span>
+                <span class="kw">let</span> <span class="name">parts</span>  <span class="syntax">=</span> <span class="name">splitDirectories</span> <span class="name">fp</span>
+                    <span class="name">rest</span>   <span class="syntax">=</span> <span class="name">stripPrefix</span> <span class="name">prefix</span> <span class="name">parts</span>
+                <span class="kw">in</span> <span class="kw">case</span> <span class="name">rest</span> <span class="kw">of</span>
+                    <span class="constr-name">Nothing</span> <span class="syntax">-&gt;</span> <span class="name">return</span> <span class="name">mempty</span>
+                    <span class="constr-name">Just</span> <span class="name">r</span>  <span class="syntax">-&gt;</span> <span class="name">put</span> <span class="name">fps</span> <span class="infix-op">&gt;&gt;</span> <span class="name">go2</span> <span class="name">prefix</span> <span class="brace">(</span><span class="name">r</span><span class="punct">,</span><span class="name">anchor</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p><code>go2</code> inserts the nested levels for a single module name</p></td><td class="code"><pre><code class="haskell">    <span class="name">go2</span> <span class="name">prefix</span> <span class="brace">(</span><span class="brace">(</span><span class="name">x</span><span class="name"><span class="syntax">:</span></span><span class="name">xs</span><span class="brace">)</span><span class="punct">,</span> <span class="name">anchor</span><span class="brace">)</span> <span class="syntax">=</span> <span class="kw">do</span>
+        <span class="kw">let</span> <span class="name">base</span>  <span class="syntax">=</span> <span class="name">takeBaseName</span> <span class="name">x</span>
+            <span class="name">label</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.toHtml</span> <span class="brace">(</span><span class="name">intercalate</span> <span class="lit string">&quot;.&quot;</span> <span class="brace">(</span><span class="name">prefix</span> <span class="infix-op">++</span> <span class="brace">[</span><span class="name">base</span><span class="brace">]</span><span class="brace">)</span><span class="brace">)</span>
+            <span class="name">link</span>  <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.a</span> <span class="infix-op">!</span> <span class="module-name">A</span><span class="name">.href</span> <span class="brace">(</span><span class="name">fromString</span> <span class="brace">(</span>'#' <span class="infix-op">:</span> <span class="name">anchor</span><span class="brace">)</span><span class="brace">)</span> <span class="infix-op">$</span> <span class="name">label</span>
+            <span class="name">tag</span>   <span class="syntax">=</span> <span class="kw">if</span> <span class="name">null</span> <span class="name">xs</span> <span class="kw">then</span> <span class="name">link</span> <span class="kw">else</span> <span class="name">label</span>
+        <span class="name">descend</span> <span class="syntax">&lt;-</span> <span class="kw">case</span> <span class="name">xs</span> <span class="kw">of</span>
+</code></pre></td></tr><tr><td class="prose"><p><code>go (prefix ++ [base])</code> handles cases where we've just processed e.g. module <code>Foo/Bar.hs</code> and created a link for it. Next we have to look for possible child modules under <code>Foo/Bar/</code>.</p></td><td class="code"><pre><code class="haskell">            <span class="brace">[</span><span class="brace">]</span> <span class="syntax">-&gt;</span> <span class="name">go</span> <span class="brace">(</span><span class="name">prefix</span> <span class="infix-op">++</span> <span class="brace">[</span><span class="name">base</span><span class="brace">]</span><span class="brace">)</span>
+</code></pre></td></tr><tr><td class="prose"><p>If we still have parts of the current module name left, recurse <code>go2</code> with the next name part.</p></td><td class="code"><pre><code class="haskell">            <span class="punct">_</span>  <span class="syntax">-&gt;</span> <span class="name">go2</span> <span class="brace">(</span><span class="name">prefix</span> <span class="infix-op">++</span> <span class="brace">[</span><span class="name">x</span><span class="brace">]</span><span class="brace">)</span> <span class="brace">(</span><span class="name">xs</span><span class="punct">,</span> <span class="name">anchor</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Finally, handle sibling modules that share the same prefix.</p></td><td class="code"><pre><code class="haskell">        <span class="name">siblings</span> <span class="syntax">&lt;-</span> <span class="name">go</span> <span class="name">prefix</span>
+        <span class="name">return</span> <span class="infix-op">$</span> <span class="module-name">H</span><span class="name">.li</span> <span class="name">tag</span> <span class="infix-op">&lt;&gt;</span> <span class="module-name">H</span><span class="name">.ul</span> <span class="name">descend</span> <span class="infix-op">&lt;&gt;</span> <span class="name">siblings</span>
+
+    <span class="name">idify</span> <span class="syntax">=</span> <span class="name">map</span> <span class="brace">(</span><span class="name">id</span> <span class="infix-op">&amp;&amp;&amp;</span> <span class="name">pathToId</span><span class="brace">)</span>
+
+<span class="typesig"><span class="name">moduleToHtml</span> <span class="syntax">::</span> <span class="brace">(</span><span class="type-name">FilePath</span><span class="punct">,</span> <span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span></span>
+<span class="name">moduleToHtml</span> <span class="brace">(</span><span class="name">fp</span><span class="punct">,</span> <span class="name">t</span><span class="brace">)</span>
+    <span class="syntax">=</span>  <span class="module-name">H</span><span class="name">.tr</span> <span class="infix-op">!.</span> <span class="lit string">&quot;file-header&quot;</span> <span class="infix-op">$</span> <span class="brace">(</span><span class="module-name">H</span><span class="name">.td</span> <span class="name">anchor</span> <span class="infix-op">&lt;&gt;</span> <span class="name">fileTd</span> <span class="brace">)</span>
+    <span class="infix-op">&lt;&gt;</span> <span class="name">treeToHtml</span> <span class="name">t</span>
+    <span class="kw">where</span>
+        <span class="name">fileTd</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.td</span> <span class="infix-op">.</span> <span class="module-name">H</span><span class="name">.code</span> <span class="infix-op">.</span> <span class="module-name">H</span><span class="name">.toHtml</span> <span class="infix-op">$</span> <span class="name">fp</span>
+        <span class="name">anchor</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.a</span> <span class="infix-op">!#</span> <span class="name">fromString</span> <span class="brace">(</span><span class="name">pathToId</span> <span class="name">fp</span><span class="brace">)</span> <span class="infix-op">$</span> <span class="lit string">&quot;&quot;</span>
+
+
+<span class="typesig"><span class="name">pathToId</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="type-name">String</span></span>
+<span class="name">pathToId</span> <span class="syntax">=</span> <span class="name">map</span> <span class="name">replaceChar</span> <span class="infix-op">.</span> <span class="name">dropExtension</span> <span class="kw">where</span>
+    <span class="name">replaceChar</span> <span class="name">c</span>
+        <span class="syntax">|</span> <span class="name">c</span> <span class="infix-op">`elem`</span> <span class="name">pathSeparators</span> <span class="syntax">=</span> '.'
+        <span class="syntax">|</span> <span class="name">otherwise</span>     <span class="syntax">=</span> <span class="name">c</span>
+
+<span class="kw">data</span> <span class="name">Section</span> <span class="syntax">=</span> <span class="name">Section</span>
+    <span class="brace">{</span> <span class="name">sectionProse</span> <span class="syntax">::</span> <span class="type-name">String</span>
+    <span class="punct">,</span> <span class="name">sectionCode</span>  <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span>
+    <span class="brace">}</span> <span class="kw">deriving</span> <span class="name">Show</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Split the presentation tree into sections at every <code>ProseComment</code> label.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">extractSections</span> <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span> <span class="syntax">-&gt;</span> <span class="brace">[</span><span class="type-name">Section</span></span><span class="brace">]</span>
+<span class="name">extractSections</span> <span class="syntax">=</span> <span class="brace">(</span><span class="name">pad</span><span class="infix-op">:</span><span class="brace">)</span> <span class="infix-op">.</span> <span class="brace">(</span><span class="infix-op">++</span><span class="brace">[</span><span class="name">pad</span><span class="brace">]</span><span class="brace">)</span> <span class="infix-op">.</span> <span class="name">map</span> <span class="name">toSection</span> <span class="infix-op">.</span> <span class="name">splitTree</span> <span class="name">isProse</span> <span class="kw">where</span>
+    <span class="name">toSection</span> <span class="brace">(</span><span class="name">sep</span><span class="punct">,</span> <span class="name">tree</span><span class="brace">)</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">sep</span> <span class="kw">of</span>
+        <span class="constr-name">Nothing</span> <span class="syntax">-&gt;</span> <span class="constr-name">Section</span> <span class="lit string">&quot;&quot;</span> <span class="name">tree</span>
+        <span class="constr-name">Just</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="brace">(</span><span class="constr-name">ProseComment</span> <span class="name">prose</span><span class="brace">)</span> <span class="punct">_</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="constr-name">Section</span> <span class="name">prose</span> <span class="name">tree</span>
+    <span class="name">pad</span> <span class="syntax">=</span> <span class="constr-name">Section</span> <span class="lit string">&quot;&quot;</span> <span class="brace">(</span><span class="constr-name">Leaf</span> <span class="lit string">&quot;\n&quot;</span><span class="brace">)</span>
+
+<span class="typesig"><span class="name">treeToHtml</span> <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span></span>
+<span class="name">treeToHtml</span> <span class="syntax">=</span> <span class="name">mapM_</span> <span class="name">sectionToHtml</span> <span class="infix-op">.</span> <span class="name">extractSections</span>
+
+<span class="typesig"><span class="name">sectionToHtml</span> <span class="syntax">::</span> <span class="type-name">Section</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span></span>
+<span class="name">sectionToHtml</span> <span class="brace">(</span><span class="constr-name">Section</span> <span class="brace">{</span><span class="punct">..</span><span class="brace">}</span><span class="brace">)</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.tr</span> <span class="brace">(</span><span class="name">proseTd</span> <span class="infix-op">&lt;&gt;</span> <span class="name">codeTd</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">proseTd</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.td</span> <span class="infix-op">!.</span> <span class="lit string">&quot;prose&quot;</span> <span class="infix-op">$</span> <span class="name">markdownToHtml</span> <span class="name">sectionProse</span>
+
+    <span class="name">codeTd</span>  <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.td</span> <span class="infix-op">!.</span> <span class="lit string">&quot;code&quot;</span>
+        <span class="infix-op">$</span> <span class="module-name">H</span><span class="name">.pre</span>
+        <span class="infix-op">$</span> <span class="module-name">H</span><span class="name">.code</span> <span class="infix-op">!.</span> <span class="lit string">&quot;haskell&quot;</span>
+        <span class="infix-op">$</span> <span class="name">codeTreeToHtml</span> <span class="name">sectionCode</span>
+
+<span class="typesig"><span class="name">markdownToHtml</span> <span class="syntax">::</span> <span class="type-name">String</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span></span>
+<span class="name">markdownToHtml</span>
+    <span class="syntax">=</span> <span class="name">writeHtml</span> <span class="name">defaultWriterOptions</span>
+    <span class="infix-op">.</span> <span class="name">readMarkdown</span> <span class="name">defaultParserState</span>
+
+<span class="typesig"><span class="name">codeTreeToHtml</span> <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span></span>
+<span class="name">codeTreeToHtml</span> <span class="syntax">=</span> <span class="name">foldTree</span> <span class="name">addSpan</span> <span class="module-name">H</span><span class="name">.toHtml</span> <span class="infix-op">.</span> <span class="name">pruneEmptyBranches</span> <span class="kw">where</span>
+    <span class="name">addSpan</span> <span class="name">cls</span> <span class="name">inner</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">unwords</span> <span class="brace">(</span><span class="name">cssClass</span> <span class="name">cls</span><span class="brace">)</span> <span class="kw">of</span>
+        <span class="lit string">&quot;&quot;</span> <span class="syntax">-&gt;</span> <span class="name">inner</span>
+        <span class="name">c</span>  <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="name">.span</span> <span class="infix-op">!.</span> <span class="name">fromString</span> <span class="name">c</span> <span class="infix-op">$</span> <span class="name">inner</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Map the fragment classifiers into css classes.</p></td><td class="code"><pre><code class="haskell">    <span class="name">cssClass</span> <span class="constr-name">Keyword</span>         <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;kw&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">Pragma</span>          <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;kw&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">ModulePragma</span>    <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;pragma&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">ModuleName</span>      <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;module-name&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">Name</span>            <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;name&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">Signature</span>       <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;typesig&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">TypeName</span>        <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;type-name&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">ConstrName</span>      <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;constr-name&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">Braces</span>          <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;brace&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">SpecPunctuation</span> <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;syntax&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">Punctuation</span>     <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;punct&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">InfixOperator</span>   <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;infix-op&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">StringLit</span>       <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;lit&quot;</span><span class="punct">,</span> <span class="lit string">&quot;string&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">LineComment</span>     <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;comment&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">BlockComment</span>    <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;comment&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="constr-name">ImportDecl</span>      <span class="syntax">=</span> <span class="brace">[</span><span class="lit string">&quot;import&quot;</span><span class="brace">]</span>
+    <span class="name">cssClass</span> <span class="punct">_</span>               <span class="syntax">=</span> <span class="brace">[</span><span class="brace">]</span>
+
+<span class="typesig"><span class="name">renderPage</span> <span class="syntax">::</span> <span class="type-name">FilePath</span> <span class="syntax">-&gt;</span> <span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span> <span class="syntax">-&gt;</span> <span class="brace">[</span><span class="module-name">H</span><span class="punct">.</span><span class="type-name">Html</span><span class="brace">]</span> <span class="syntax">-&gt;</span> <span class="type-name">String</span></span>
+<span class="name">renderPage</span> <span class="name">css</span> <span class="name">toc</span> <span class="name">mods</span> <span class="syntax">=</span> <span class="name">renderHtml</span> <span class="infix-op">.</span> <span class="module-name">H</span><span class="name">.docTypeHtml</span> <span class="infix-op">$</span> <span class="name">docHead</span> <span class="infix-op">&gt;&gt;</span> <span class="name">docBody</span> <span class="kw">where</span>
+    <span class="name">docHead</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.head</span> <span class="infix-op">$</span> <span class="name">cssLink</span> <span class="infix-op">&gt;&gt;</span> <span class="module-name">H</span><span class="name">.title</span> <span class="lit string">&quot;ProseDoc Generated Module Listing&quot;</span>
+    <span class="name">docBody</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.body</span> <span class="infix-op">$</span> <span class="brace">(</span><span class="module-name">H</span><span class="name">.table</span> <span class="infix-op">!.</span> <span class="lit string">&quot;sections&quot;</span><span class="brace">)</span> <span class="infix-op">$</span> <span class="name">toc</span> <span class="infix-op">&lt;&gt;</span> <span class="name">mconcat</span> <span class="name">mods</span>
+
+    <span class="name">cssLink</span> <span class="syntax">=</span> <span class="module-name">H</span><span class="name">.link</span>
+        <span class="infix-op">!</span> <span class="module-name">A</span><span class="name">.rel</span> <span class="lit string">&quot;stylesheet&quot;</span>
+        <span class="infix-op">!</span> <span class="module-name">A</span><span class="name">.type_</span> <span class="lit string">&quot;text/css&quot;</span>
+        <span class="infix-op">!</span> <span class="module-name">A</span><span class="name">.href</span> <span class="brace">(</span><span class="name">fromString</span> <span class="name">css</span><span class="brace">)</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Tree"></a></td><td><code>Text/ProseDoc/Tree.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell"><span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">GADTs</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">MultiParamTypeClasses</span></span> #-}
+
+<span class="kw">module</span> Text.ProseDoc.Tree <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Monoid</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Data.Foldable</span> <span class="brace">(</span><span class="name">foldMap</span></span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>A tree data type holds labels, branches and leaf nodes. A label classifies all branches and leaves below it.</p></td><td class="code"><pre><code class="haskell"><span class="kw">data</span> <span class="name">Tree</span> <span class="name">l</span> <span class="name">n</span> <span class="kw">where</span>
+    <span class="name">Empty</span>  <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span>
+    <span class="name">Label</span>  <span class="syntax">::</span> <span class="type-name">l</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span>
+    <span class="name">Branch</span> <span class="syntax">::</span> <span class="brace">[</span><span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span><span class="brace">]</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span>
+    <span class="name">Leaf</span>   <span class="syntax">::</span> <span class="type-name">n</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span>
+    <span class="kw">deriving</span> <span class="brace">(</span><span class="name">Show</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>The tree is folded into a monoid, depth-first using an abstract function that takes in two functions. The first is used to process labels and the second to process leaf data.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">foldTree</span> <span class="syntax">::</span> <span class="type-name">Monoid r <span class="syntax">=&gt;</span> <span class="brace">(</span>l <span class="syntax">-&gt;</span> r <span class="syntax">-&gt;</span> r<span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="brace">(</span>n <span class="syntax">-&gt;</span> r<span class="brace">)</span> <span class="syntax">-&gt;</span> Tree l n <span class="syntax">-&gt;</span> r</span></span>
+<span class="name">foldTree</span> <span class="name">bf</span> <span class="name">lf</span> <span class="syntax">=</span> <span class="name">go</span> <span class="kw">where</span>
+    <span class="name">go</span> <span class="constr-name">Empty</span>           <span class="syntax">=</span> <span class="name">mempty</span>
+    <span class="name">go</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="name">l</span> <span class="name">tree</span><span class="brace">)</span>  <span class="syntax">=</span> <span class="name">bf</span> <span class="name">l</span> <span class="brace">(</span><span class="name">go</span> <span class="name">tree</span><span class="brace">)</span>
+    <span class="name">go</span> <span class="brace">(</span><span class="constr-name">Branch</span> <span class="name">leaves</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">foldMap</span> <span class="name">go</span> <span class="name">leaves</span>
+    <span class="name">go</span> <span class="brace">(</span><span class="constr-name">Leaf</span> <span class="name">t</span><span class="brace">)</span>        <span class="syntax">=</span> <span class="name">lf</span> <span class="name">t</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Trees form a monoid so that the two trees are inserted as siblings into a branch.</p></td><td class="code"><pre><code class="haskell"><span class="kw">instance</span> <span class="name">Monoid</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mempty</span>          <span class="syntax">=</span> <span class="constr-name">Empty</span>
+
+    <span class="name">mappend</span> <span class="constr-name">Empty</span> <span class="name">b</span> <span class="syntax">=</span> <span class="name">b</span>
+    <span class="name">mappend</span> <span class="name">a</span> <span class="constr-name">Empty</span> <span class="syntax">=</span> <span class="name">a</span>
+    <span class="name">mappend</span> <span class="brace">(</span><span class="constr-name">Branch</span> <span class="name">b</span><span class="brace">)</span> <span class="brace">(</span><span class="constr-name">Branch</span> <span class="name">b'</span><span class="brace">)</span> <span class="syntax">=</span> <span class="constr-name">Branch</span> <span class="brace">(</span><span class="name">b</span> <span class="infix-op">&lt;&gt;</span> <span class="name">b'</span><span class="brace">)</span>
+    <span class="name">mappend</span> <span class="name">a</span> <span class="brace">(</span><span class="constr-name">Branch</span> <span class="name">b</span><span class="brace">)</span> <span class="syntax">=</span> <span class="constr-name">Branch</span> <span class="brace">(</span><span class="name">a</span><span class="infix-op">:</span><span class="name">b</span><span class="brace">)</span>
+    <span class="name">mappend</span> <span class="name">a</span> <span class="name">b</span> <span class="syntax">=</span> <span class="constr-name">Branch</span> <span class="brace">[</span><span class="name">a</span><span class="punct">,</span><span class="name">b</span><span class="brace">]</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Remove all label nodes from the tree.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">pruneLabels</span> <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span></span>
+<span class="name">pruneLabels</span> <span class="name">t</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">t</span> <span class="kw">of</span>
+    <span class="constr-name">Label</span> <span class="punct">_</span> <span class="name">t'</span> <span class="syntax">-&gt;</span> <span class="name">t'</span>
+    <span class="constr-name">Branch</span> <span class="name">bs</span>  <span class="syntax">-&gt;</span> <span class="constr-name">Branch</span> <span class="infix-op">$</span> <span class="name">map</span> <span class="name">pruneLabels</span> <span class="name">bs</span>
+    <span class="name">t'</span>         <span class="syntax">-&gt;</span> <span class="name">t'</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Remove parts of the tree that don't contain any leaf nodes.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">pruneEmptyBranches</span> <span class="syntax">::</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span></span>
+<span class="name">pruneEmptyBranches</span> <span class="name">t</span> <span class="syntax">=</span> <span class="name">go</span> <span class="name">t</span> <span class="kw">where</span>
+    <span class="name">go</span> <span class="name">t</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">t</span> <span class="kw">of</span>
+        <span class="constr-name">Empty</span>     <span class="syntax">-&gt;</span> <span class="constr-name">Empty</span>
+        <span class="constr-name">Branch</span> <span class="name">bs</span> <span class="syntax">-&gt;</span> <span class="kw">case</span> <span class="name">filter</span> <span class="name">notEmpty</span> <span class="infix-op">.</span> <span class="name">map</span> <span class="name">go</span> <span class="infix-op">$</span> <span class="name">bs</span> <span class="kw">of</span>
+            <span class="brace">[</span><span class="brace">]</span>  <span class="syntax">-&gt;</span> <span class="constr-name">Empty</span>
+            <span class="name">bs'</span> <span class="syntax">-&gt;</span> <span class="constr-name">Branch</span> <span class="name">bs'</span>
+        <span class="constr-name">Label</span> <span class="name">l</span> <span class="name">t</span> <span class="syntax">-&gt;</span> <span class="kw">case</span> <span class="name">go</span> <span class="name">t</span> <span class="kw">of</span>
+            <span class="constr-name">Empty</span> <span class="syntax">-&gt;</span> <span class="constr-name">Empty</span>
+            <span class="name">t'</span>    <span class="syntax">-&gt;</span> <span class="constr-name">Label</span> <span class="name">l</span> <span class="name">t'</span>
+        <span class="name">n</span>         <span class="syntax">-&gt;</span> <span class="name">n</span>
+
+    <span class="name">notEmpty</span> <span class="constr-name">Empty</span> <span class="syntax">=</span> <span class="constr-name">False</span>
+    <span class="name">notEmpty</span> <span class="punct">_</span>     <span class="syntax">=</span> <span class="constr-name">True</span>
+
+
+</code></pre></td></tr><tr><td class="prose"><p>A tree can be split into parts based a label test. The split off parts will contain the same labels when walking the tree spine as the part they were cut off from.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">breakTree</span> <span class="syntax">::</span> <span class="brace">(</span><span class="type-name">l</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span><span class="punct">,</span> <span class="type-name">Maybe</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span><span class="brace">)</span><span class="punct">,</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span></span><span class="brace">)</span>
+<span class="name">breakTree</span> <span class="name">test</span> <span class="syntax">=</span> <span class="name">go</span> <span class="kw">where</span>
+    <span class="name">go</span> <span class="name">t</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">t</span> <span class="kw">of</span>
+        <span class="constr-name">Empty</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="constr-name">Empty</span><span class="punct">,</span> <span class="constr-name">Nothing</span><span class="punct">,</span> <span class="constr-name">Empty</span><span class="brace">)</span>
+        <span class="constr-name">Label</span> <span class="name">l</span> <span class="name">t'</span>
+            <span class="syntax">|</span> <span class="name">test</span> <span class="name">l</span>    <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="constr-name">Empty</span><span class="punct">,</span> <span class="constr-name">Just</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="name">l</span> <span class="name">t'</span><span class="brace">)</span><span class="punct">,</span> <span class="constr-name">Empty</span><span class="brace">)</span>
+            <span class="syntax">|</span> <span class="name">otherwise</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="constr-name">Label</span> <span class="name">l</span> <span class="name">a</span><span class="punct">,</span> <span class="name">sep</span><span class="punct">,</span> <span class="name">b'</span><span class="brace">)</span>
+            <span class="kw">where</span>
+                <span class="brace">(</span><span class="name">a</span><span class="punct">,</span> <span class="name">sep</span><span class="punct">,</span> <span class="name">b</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">go</span> <span class="name">t'</span>
+                <span class="name">b'</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">sep</span> <span class="kw">of</span>
+                    <span class="constr-name">Nothing</span> <span class="syntax">-&gt;</span> <span class="constr-name">Empty</span>
+                    <span class="punct">_</span>       <span class="syntax">-&gt;</span> <span class="constr-name">Label</span> <span class="name">l</span> <span class="name">b</span>
+        <span class="constr-name">Leaf</span> <span class="name">n</span>    <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="constr-name">Leaf</span> <span class="name">n</span><span class="punct">,</span> <span class="constr-name">Nothing</span><span class="punct">,</span> <span class="constr-name">Empty</span><span class="brace">)</span>
+        <span class="constr-name">Branch</span> <span class="name">bs</span> <span class="syntax">-&gt;</span> <span class="kw">case</span> <span class="name">sep</span> <span class="kw">of</span>
+            <span class="constr-name">Nothing</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="constr-name">Branch</span> <span class="name">bs</span><span class="punct">,</span> <span class="constr-name">Nothing</span><span class="punct">,</span> <span class="constr-name">Empty</span><span class="brace">)</span>
+            <span class="punct">_</span>       <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="name">mconcat</span> <span class="name">a</span><span class="punct">,</span> <span class="name">sep</span><span class="punct">,</span> <span class="name">mconcat</span> <span class="name">b</span><span class="brace">)</span>
+            <span class="kw">where</span> <span class="brace">(</span><span class="name">a</span><span class="punct">,</span> <span class="name">sep</span><span class="punct">,</span> <span class="name">b</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">gob</span> <span class="name">bs</span>
+
+    <span class="name">gob</span> <span class="brace">[</span><span class="brace">]</span> <span class="syntax">=</span> <span class="brace">(</span><span class="brace">[</span><span class="brace">]</span><span class="punct">,</span> <span class="constr-name">Nothing</span><span class="punct">,</span> <span class="brace">[</span><span class="brace">]</span><span class="brace">)</span>
+    <span class="name">gob</span> <span class="brace">(</span><span class="name">b</span><span class="name"><span class="syntax">:</span></span><span class="name">bs</span><span class="brace">)</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">sep</span> <span class="kw">of</span>
+        <span class="constr-name">Nothing</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="name">l</span><span class="infix-op">:</span><span class="name">b'</span><span class="punct">,</span> <span class="name">sep'</span><span class="punct">,</span> <span class="name">bs'</span><span class="brace">)</span>
+        <span class="punct">_</span>       <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="name">l</span><span class="infix-op">:</span><span class="brace">[</span><span class="brace">]</span><span class="punct">,</span> <span class="name">sep</span><span class="punct">,</span> <span class="name">r</span><span class="infix-op">:</span><span class="name">bs</span><span class="brace">)</span>
+        <span class="kw">where</span>
+            <span class="brace">(</span><span class="name">l</span><span class="punct">,</span> <span class="name">sep</span><span class="punct">,</span> <span class="name">r</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">go</span> <span class="name">b</span>
+            <span class="brace">(</span><span class="name">b'</span><span class="punct">,</span> <span class="name">sep'</span><span class="punct">,</span> <span class="name">bs'</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">gob</span> <span class="name">bs</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Version of <code>breakTree</code> which splits the tree into a list of tree sections.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">splitTree</span> <span class="syntax">::</span> <span class="brace">(</span><span class="type-name">l</span> <span class="syntax">-&gt;</span> <span class="type-name">Bool</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span> <span class="syntax">-&gt;</span> <span class="brace">[</span><span class="brace">(</span><span class="type-name">Maybe</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span><span class="brace">)</span><span class="punct">,</span> <span class="type-name">Tree</span> <span class="type-name">l</span> <span class="type-name">n</span></span><span class="brace">)</span><span class="brace">]</span>
+<span class="name">splitTree</span> <span class="name">test</span> <span class="syntax">=</span> <span class="name">go</span> <span class="constr-name">Nothing</span> <span class="kw">where</span>
+    <span class="name">go</span> <span class="constr-name">Nothing</span> <span class="constr-name">Empty</span> <span class="syntax">=</span> <span class="brace">[</span><span class="brace">]</span>
+    <span class="name">go</span> <span class="name">sep</span> <span class="constr-name">Empty</span> <span class="syntax">=</span> <span class="brace">(</span><span class="name">sep</span><span class="punct">,</span> <span class="constr-name">Empty</span><span class="brace">)</span> <span class="infix-op">:</span> <span class="brace">[</span><span class="brace">]</span>
+    <span class="name">go</span> <span class="name">sep</span> <span class="name">t</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="brace">(</span><span class="name">sep</span><span class="punct">,</span> <span class="name">l</span><span class="brace">)</span> <span class="kw">of</span>
+        <span class="brace">(</span><span class="constr-name">Nothing</span><span class="punct">,</span> <span class="constr-name">Empty</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="name">go</span> <span class="name">sep'</span> <span class="name">r</span>
+        <span class="punct">_</span>                <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="name">sep</span><span class="punct">,</span> <span class="name">l</span><span class="brace">)</span> <span class="infix-op">:</span> <span class="name">go</span> <span class="name">sep'</span> <span class="name">r</span>
+
+        <span class="kw">where</span> <span class="brace">(</span><span class="name">l</span><span class="punct">,</span> <span class="name">sep'</span><span class="punct">,</span> <span class="name">r</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">breakTree</span> <span class="name">test</span> <span class="name">t</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr><tr class="file-header"><td><a id="Text.ProseDoc.Tree.Builder"></a></td><td><code>Text/ProseDoc/Tree/Builder.hs</code></td><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell"><span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">GeneralizedNewtypeDeriving</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">FlexibleInstances</span></span> #-}
+<span class="pragma"><span class="punct">{-#</span><span class="kw"> LANGUAGE</span> <span class="name">ViewPatterns</span></span> #-}
+
+<span class="kw">module</span> Text.ProseDoc.Tree.Builder <span class="kw">where</span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Monad.State</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Monad.Writer</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Control.Applicative</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Language.Haskell.Exts.SrcLoc</span></span>
+
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Tree</span></span>
+<span class="import"><span class="kw">import</span> <span class="module-name">Text.ProseDoc.Classifier.Types</span></span>
+
+</code></pre></td></tr><tr><td class="prose"><p>A <code>TreeBuilder</code> is a helper monad for associating AST elements with the position tagged streams of tokens and comments.</p>
+<p>The first state transformer tracks the remaining source code and the current line/row position in the file. The inner state monad keeps a stack of source code fragments (tokens and comments) which are popped from the stack by the AST element that covers the source location.</p></td><td class="code"><pre><code class="haskell"><span class="kw">newtype</span> <span class="name">TreeBuilder</span> <span class="name">a</span> <span class="syntax">=</span> <span class="name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">StateT</span> <span class="brace">(</span><span class="type-name">String</span><span class="punct">,</span> <span class="type-name">Pos</span><span class="brace">)</span> <span class="brace">(</span><span class="type-name">State</span> <span class="brace">[</span><span class="type-name">Fragment</span><span class="brace">]</span><span class="brace">)</span> <span class="type-name">a</span><span class="brace">)</span>
+    <span class="kw">deriving</span> <span class="brace">(</span><span class="name">Functor</span><span class="punct">,</span> <span class="name">Applicative</span><span class="punct">,</span> <span class="name">Monad</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>For convenience, we define a monoid instance for tree-producing <code>TreeBuilders</code> so that we can directly mappend two monadic operations.</p></td><td class="code"><pre><code class="haskell"><span class="kw">instance</span> <span class="name">Monoid</span> <span class="brace">(</span><span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span><span class="brace">)</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">mempty</span>  <span class="syntax">=</span> <span class="name">return</span> <span class="name">mempty</span>
+    <span class="name">mappend</span> <span class="syntax">=</span> <span class="name">liftM2</span> <span class="name">mappend</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Given a <code>TreeBuilder</code>, the origina lsource code and classified fragments, create a tree of classified, printable elements.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">runTreeBuilder</span>
+    <span class="syntax">::</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span><span class="brace">)</span>
+    <span class="syntax">-&gt;</span> <span class="type-name">String</span>
+    <span class="syntax">-&gt;</span> <span class="brace">[</span><span class="type-name">Fragment</span><span class="brace">]</span>
+    <span class="syntax">-&gt;</span> <span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span>
+<span class="name">runTreeBuilder</span> <span class="brace">(</span><span class="constr-name">TreeBuilder</span> <span class="name">bldr</span><span class="brace">)</span> <span class="name">src</span> <span class="syntax">=</span>
+    <span class="name">evalState</span> <span class="infix-op">$</span> <span class="name">evalStateT</span> <span class="name">bldr</span> <span class="brace">(</span><span class="name">src</span><span class="punct">,</span><span class="brace">(</span>1<span class="punct">,</span>1<span class="brace">)</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Pop all fragments that are before the given position.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popFragments</span> <span class="syntax">::</span> <span class="type-name">Pos</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">[</span><span class="type-name">Fragment</span></span><span class="brace">]</span>
+<span class="name">popFragments</span> <span class="name">pos</span> <span class="syntax">=</span> <span class="constr-name">TreeBuilder</span> <span class="infix-op">$</span> <span class="kw">do</span>
+    <span class="name">fragments</span> <span class="syntax">&lt;-</span> <span class="name">lift</span> <span class="name">get</span>
+    <span class="kw">let</span> <span class="brace">(</span><span class="name">include</span><span class="punct">,</span> <span class="name">exclude</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">span</span> <span class="brace">(</span><span class="brace">(</span><span class="infix-op">&lt;=</span> <span class="name">pos</span><span class="brace">)</span><span class="infix-op">.</span><span class="name">srcSpanEnd</span><span class="infix-op">.</span><span class="name">fst</span><span class="brace">)</span> <span class="name">fragments</span>
+        <span class="brace">(</span><span class="name">include'</span><span class="punct">,</span> <span class="name">exclude'</span><span class="brace">)</span> <span class="syntax">=</span> <span class="kw">case</span> <span class="name">exclude</span> <span class="kw">of</span>
+            <span class="brace">(</span><span class="name">e</span><span class="syntax">@</span><span class="brace">(</span><span class="name">p</span><span class="punct">,</span><span class="punct">_</span><span class="brace">)</span><span class="name"><span class="syntax">:</span></span><span class="punct">_</span><span class="brace">)</span> <span class="syntax">|</span> <span class="name">srcSpanStart</span> <span class="name">p</span> <span class="infix-op">&lt;</span> <span class="name">pos</span> <span class="syntax">-&gt;</span>
+                <span class="kw">let</span> <span class="brace">(</span><span class="name">e'</span><span class="punct">,</span><span class="name">e''</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">breakFragment</span> <span class="name">pos</span> <span class="name">e</span>
+                <span class="kw">in</span> <span class="brace">(</span><span class="name">include</span> <span class="infix-op">++</span> <span class="brace">[</span><span class="name">e'</span><span class="brace">]</span><span class="punct">,</span> <span class="name">e''</span><span class="infix-op">:</span><span class="name">exclude</span><span class="brace">)</span>
+            <span class="punct">_</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="name">include</span><span class="punct">,</span> <span class="name">exclude</span><span class="brace">)</span>
+    <span class="name">lift</span> <span class="infix-op">$</span> <span class="name">put</span> <span class="name">exclude'</span>
+    <span class="name">return</span> <span class="name">include'</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Sometimes we need to manually tweak some fragments. <code>popCustom</code> lets us pop a custom fragment with given classifier and length from the current source position.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popCustom</span> <span class="syntax">::</span> <span class="type-name">Classifier</span> <span class="syntax">-&gt;</span> <span class="type-name">Int</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">popCustom</span> <span class="name">cls</span> <span class="name">len</span> <span class="syntax">=</span> <span class="kw">do</span>
+    <span class="brace">(</span><span class="name">ln</span><span class="punct">,</span><span class="name">col</span><span class="brace">)</span> <span class="syntax">&lt;-</span> <span class="constr-name">TreeBuilder</span> <span class="infix-op">$</span> <span class="name">gets</span> <span class="name">snd</span>
+    <span class="name">fragmentToTree</span> <span class="brace">(</span><span class="constr-name">SrcSpan</span> <span class="lit string">&quot;&quot;</span> <span class="name">ln</span> <span class="name">col</span> <span class="name">ln</span> <span class="brace">(</span><span class="name">col</span> <span class="infix-op">+</span> <span class="name">len</span><span class="brace">)</span><span class="punct">,</span> <span class="name">cls</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Break a fragment into two parts at position.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">breakFragment</span> <span class="syntax">::</span> <span class="type-name">Pos</span> <span class="syntax">-&gt;</span> <span class="type-name">Fragment</span> <span class="syntax">-&gt;</span> <span class="brace">(</span><span class="type-name">Fragment</span><span class="punct">,</span> <span class="type-name">Fragment</span></span><span class="brace">)</span>
+<span class="name">breakFragment</span> <span class="brace">(</span><span class="name">ln</span><span class="punct">,</span><span class="name">col</span><span class="brace">)</span> <span class="brace">(</span><span class="name">l</span><span class="punct">,</span> <span class="name">cls</span><span class="brace">)</span> <span class="syntax">=</span> <span class="brace">(</span><span class="brace">(</span><span class="name">loc</span><span class="punct">,</span> <span class="name">cls</span><span class="brace">)</span><span class="punct">,</span> <span class="brace">(</span><span class="name">loc'</span><span class="punct">,</span> <span class="name">cls</span><span class="brace">)</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">loc</span>  <span class="syntax">=</span> <span class="name">l</span> <span class="brace">{</span> <span class="name">srcSpanEndColumn</span> <span class="syntax">=</span> <span class="name">col</span><span class="punct">,</span> <span class="name">srcSpanEndLine</span> <span class="syntax">=</span> <span class="name">ln</span> <span class="brace">}</span>
+    <span class="name">loc'</span> <span class="syntax">=</span> <span class="name">l</span> <span class="brace">{</span> <span class="name">srcSpanStartColumn</span> <span class="syntax">=</span> <span class="name">col</span><span class="punct">,</span> <span class="name">srcSpanStartLine</span> <span class="syntax">=</span> <span class="name">ln</span> <span class="brace">}</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Pop fragments that are located inside the given <code>SrcSpan</code> from the stack and structure them into a tree.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popPrintables</span> <span class="syntax">::</span> <span class="type-name">SrcSpan</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">popPrintables</span> <span class="name">loc</span> <span class="syntax">|</span> <span class="name">isNullSpan</span> <span class="name">loc</span> <span class="syntax">=</span> <span class="name">return</span> <span class="constr-name">Empty</span>
+<span class="name">popPrintables</span> <span class="name">loc</span> <span class="syntax">=</span>
+    <span class="name">mconcat</span> <span class="infix-op">&lt;$&gt;</span> <span class="brace">(</span><span class="name">popFragments</span> <span class="brace">(</span><span class="name">srcSpanEnd</span> <span class="name">loc</span><span class="brace">)</span> <span class="infix-op">&gt;&gt;=</span> <span class="name">mapM</span> <span class="name">fragmentToTree</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Pop fragments that are located <em>before</em> the given <code>SrcSpan</code> from the stack and structure them into a tree.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popPrintablesBefore</span> <span class="syntax">::</span> <span class="type-name">SrcSpan</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">popPrintablesBefore</span> <span class="name">loc</span> <span class="syntax">=</span>
+    <span class="brace">(</span><span class="name">mconcat</span> <span class="infix-op">&lt;$&gt;</span> <span class="brace">(</span><span class="name">popFragments</span> <span class="brace">(</span><span class="name">srcSpanStart</span> <span class="name">loc</span><span class="brace">)</span> <span class="infix-op">&gt;&gt;=</span> <span class="name">mapM</span> <span class="name">fragmentToTree</span><span class="brace">)</span><span class="brace">)</span>
+    <span class="infix-op">&lt;&gt;</span> <span class="name">leftOvers</span>
+    <span class="kw">where</span>
+        <span class="name">leftOvers</span> <span class="syntax">=</span> <span class="kw">do</span>
+            <span class="name">fragments</span> <span class="syntax">&lt;-</span> <span class="constr-name">TreeBuilder</span> <span class="infix-op">$</span> <span class="name">lift</span> <span class="name">get</span>
+            <span class="kw">case</span> <span class="name">fragments</span> <span class="kw">of</span>
+                <span class="brace">[</span><span class="brace">]</span>    <span class="syntax">-&gt;</span> <span class="name">return</span> <span class="name">mempty</span>
+                <span class="brace">(</span><span class="brace">(</span><span class="name">loc'</span><span class="punct">,</span><span class="punct">_</span><span class="brace">)</span><span class="name"><span class="syntax">:</span></span><span class="punct">_</span><span class="brace">)</span> <span class="syntax">-&gt;</span> <span class="name">beforeToTree</span> <span class="name">loc'</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Pop all remaining source fragments from the stack.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">popRemaining</span> <span class="syntax">::</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">popRemaining</span> <span class="syntax">=</span> <span class="name">mconcat</span> <span class="infix-op">&lt;$&gt;</span> <span class="brace">(</span><span class="name">popAllFragments</span> <span class="infix-op">&gt;&gt;=</span> <span class="name">mapM</span> <span class="name">fragmentToTree</span><span class="brace">)</span> <span class="kw">where</span>
+    <span class="name">popAllFragments</span> <span class="syntax">=</span> <span class="constr-name">TreeBuilder</span> <span class="brace">(</span><span class="name">lift</span> <span class="name">get</span> <span class="infix-op">&lt;*</span> <span class="name">lift</span> <span class="brace">(</span><span class="name">put</span> <span class="brace">[</span><span class="brace">]</span><span class="brace">)</span><span class="brace">)</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Check if the current source location is within the given span.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">currentlyWithin</span> <span class="syntax">::</span> <span class="type-name">SrcSpan</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="type-name">Bool</span></span>
+<span class="name">currentlyWithin</span> <span class="name">loc</span> <span class="syntax">=</span> <span class="constr-name">TreeBuilder</span> <span class="infix-op">$</span> <span class="name">fmap</span> <span class="brace">(</span><span class="infix-op">&lt;</span> <span class="name">srcSpanEnd</span> <span class="name">loc</span><span class="brace">)</span> <span class="infix-op">$</span> <span class="name">gets</span> <span class="name">snd</span>
+
+</code></pre></td></tr><tr><td class="prose"><p>Pop source code until the end of given fragment span and structure the fragment into a classified tree.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">fragmentToTree</span> <span class="syntax">::</span> <span class="type-name">Fragment</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">fragmentToTree</span> <span class="brace">(</span><span class="name">loc</span><span class="punct">,</span> <span class="name">cls</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">beforeToTree</span> <span class="name">loc</span> <span class="infix-op">&lt;&gt;</span> <span class="name">fragment</span> <span class="kw">where</span>
+    <span class="name">fragment</span> <span class="syntax">=</span> <span class="constr-name">Label</span> <span class="name">cls</span> <span class="infix-op">.</span> <span class="constr-name">Leaf</span> <span class="infix-op">&lt;$&gt;</span> <span class="name">extractSource</span> <span class="brace">(</span><span class="name">srcSpanEnd</span> <span class="name">loc</span><span class="brace">)</span>
+
+<span class="typesig"><span class="name">beforeToTree</span> <span class="syntax">::</span> <span class="type-name">SrcSpan</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="brace">(</span><span class="type-name">Tree</span> <span class="type-name">Classifier</span> <span class="type-name">Printable</span></span><span class="brace">)</span>
+<span class="name">beforeToTree</span> <span class="name">loc</span> <span class="syntax">=</span> <span class="kw">do</span>
+    <span class="name">pre</span> <span class="syntax">&lt;-</span> <span class="name">extractSource</span> <span class="brace">(</span><span class="name">srcSpanStart</span> <span class="name">loc</span><span class="brace">)</span>
+    <span class="kw">case</span> <span class="name">pre</span> <span class="kw">of</span>
+        <span class="lit string">&quot;&quot;</span> <span class="syntax">-&gt;</span> <span class="name">return</span> <span class="name">mempty</span>
+        <span class="punct">_</span>  <span class="syntax">-&gt;</span> <span class="name">return</span> <span class="infix-op">$</span> <span class="constr-name">Leaf</span> <span class="name">pre</span>
+</code></pre></td></tr><tr><td class="prose"><p>Retrieve source code up until the given line/row position as a string.</p></td><td class="code"><pre><code class="haskell"><span class="typesig"><span class="name">extractSource</span> <span class="syntax">::</span> <span class="type-name">Pos</span> <span class="syntax">-&gt;</span> <span class="type-name">TreeBuilder</span> <span class="type-name">String</span></span>
+<span class="name">extractSource</span> <span class="brace">(</span><span class="name">ln'</span><span class="punct">,</span> <span class="name">col'</span><span class="brace">)</span> <span class="syntax">=</span> <span class="constr-name">TreeBuilder</span> <span class="infix-op">$</span> <span class="name">unwrapWriter</span> <span class="name">go</span> <span class="kw">where</span>
+    <span class="name">unwrapWriter</span> <span class="syntax">=</span> <span class="name">fmap</span> <span class="brace">(</span><span class="infix-op">$</span><span class="lit string">&quot;&quot;</span><span class="brace">)</span> <span class="infix-op">.</span> <span class="name">execWriterT</span>
+
+    <span class="name">go</span> <span class="syntax">=</span> <span class="kw">do</span>
+        <span class="brace">(</span><span class="punct">_</span><span class="punct">,</span> <span class="brace">(</span><span class="name">ln</span><span class="punct">,</span> <span class="name">col</span><span class="brace">)</span><span class="brace">)</span> <span class="syntax">&lt;-</span> <span class="name">get</span>
+        <span class="kw">let</span> <span class="name">action</span>
+                <span class="syntax">|</span> <span class="name">ln</span> <span class="infix-op">&lt;</span> <span class="name">ln'</span>   <span class="syntax">=</span> <span class="name">popLine</span> <span class="infix-op">&gt;&gt;</span> <span class="name">go</span>
+                <span class="syntax">|</span> <span class="name">col</span> <span class="infix-op">&lt;</span> <span class="name">col'</span> <span class="syntax">=</span> <span class="name">popChars</span> <span class="brace">(</span><span class="name">col'</span><span class="infix-op">-</span><span class="name">col</span><span class="brace">)</span>
+                <span class="syntax">|</span> <span class="name">otherwise</span>  <span class="syntax">=</span> <span class="name">return</span> <span class="constr-name">()</span>
+        <span class="name">action</span>
+
+    <span class="name">popLine</span> <span class="syntax">=</span> <span class="kw">do</span>
+        <span class="brace">(</span><span class="name">src</span><span class="punct">,</span> <span class="brace">(</span><span class="name">ln</span><span class="punct">,</span> <span class="name">col</span><span class="brace">)</span><span class="brace">)</span> <span class="syntax">&lt;-</span> <span class="name">lift</span> <span class="name">get</span>
+        <span class="kw">let</span> <span class="brace">(</span><span class="name">s</span><span class="punct">,</span> <span class="name">tail</span> <span class="syntax">-&gt;</span> <span class="name">src'</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">break</span> <span class="brace">(</span><span class="infix-op">==</span>'\n'<span class="brace">)</span> <span class="name">src</span>
+        <span class="name">lift</span> <span class="infix-op">$</span> <span class="name">put</span> <span class="brace">(</span><span class="name">src'</span><span class="punct">,</span><span class="brace">(</span><span class="name">ln</span><span class="infix-op">+</span>1<span class="punct">,</span> 1<span class="brace">)</span><span class="brace">)</span>
+        <span class="name">tell</span> <span class="brace">(</span><span class="name">s</span> <span class="infix-op">++</span><span class="brace">)</span>
+        <span class="name">tell</span> <span class="brace">(</span>'\n' <span class="infix-op">:</span><span class="brace">)</span>
+
+    <span class="name">popChars</span> <span class="name">n</span> <span class="syntax">=</span> <span class="kw">do</span>
+        <span class="brace">(</span><span class="name">src</span><span class="punct">,</span> <span class="brace">(</span><span class="name">ln</span><span class="punct">,</span> <span class="name">col</span><span class="brace">)</span><span class="brace">)</span> <span class="syntax">&lt;-</span> <span class="name">lift</span> <span class="name">get</span>
+        <span class="kw">let</span> <span class="brace">(</span><span class="name">s</span><span class="punct">,</span> <span class="name">src'</span><span class="brace">)</span> <span class="syntax">=</span> <span class="name">splitAt</span> <span class="name">n</span> <span class="name">src</span>
+        <span class="name">put</span> <span class="brace">(</span><span class="name">src'</span><span class="punct">,</span> <span class="brace">(</span><span class="name">ln</span><span class="punct">,</span> <span class="name">col</span><span class="infix-op">+</span><span class="name">n</span><span class="brace">)</span><span class="brace">)</span>
+        <span class="name">tell</span> <span class="brace">(</span><span class="name">s</span> <span class="infix-op">++</span><span class="brace">)</span></code></pre></td></tr><tr><td class="prose"></td><td class="code"><pre><code class="haskell">
+</code></pre></td></tr></tr></table></body></html>
