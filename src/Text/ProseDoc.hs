@@ -10,6 +10,8 @@ The concept is blatantly borrowed from the CoffeeScript tool [docco](http://jash
 ProseDoc can be seen as an alternative way to write and format literal Haskell
 code. However, the main motivation behind writing ProseDoc was simply that it
 seemed like an interesting project to tinker with.
+
+The source code repository is located at [https://github.com/shangaslammi/prose-doc](https://github.com/shangaslammi/prose-doc).
 -}
 module Text.ProseDoc where
 
