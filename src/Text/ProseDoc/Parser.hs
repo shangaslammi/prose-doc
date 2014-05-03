@@ -13,7 +13,7 @@ import Control.Error
 
 import Data.List (sort)
 
-import Language.Haskell.Exts (readExtensions)
+import Language.Haskell.Exts (readExtensions, Language(..))
 import Language.Haskell.Exts.Lexer
 import Language.Haskell.Exts.Parser
 import Language.Haskell.Exts.SrcLoc
@@ -50,9 +50,10 @@ buildTree path src = case parseResult . parseMode <$> readExtensions src of
 
             return tree
 
-        parseMode exts = defaultParseMode
+        parseMode (lang, exts) = defaultParseMode
             { parseFilename = path
             , fixities = Just []
             , extensions = exts
+            , baseLanguage = fromMaybe Haskell2010 lang
             }
 

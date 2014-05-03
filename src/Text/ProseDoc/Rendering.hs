@@ -10,20 +10,20 @@ import Control.Monad.State
 import Control.Applicative ((<$>),(<*>))
 import Control.Arrow ((&&&))
 
+import Data.Default (def)
 import Data.Monoid
 import Data.String (fromString)
 import Data.List   (isPrefixOf, stripPrefix, intercalate)
 
+import Text.Blaze.Internal (Attributable)
 import Text.Blaze.Html5 ((!))
-import Text.Blaze.Extra
-import Text.Blaze.Renderer.String
+import Text.Blaze.Html.Renderer.String (renderHtml)
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
 import Text.Pandoc.Readers.Markdown
 import Text.Pandoc.Writers.HTML
-import Text.Pandoc.Parsing (defaultParserState)
-import Text.Pandoc.Shared (defaultWriterOptions)
+import Text.Pandoc.Options (ReaderOptions, WriterOptions)
 
 import Text.ProseDoc.Tree
 import Text.ProseDoc.Classifier.Types
@@ -132,8 +132,8 @@ sectionToHtml (Section {..}) = H.tr (proseTd <> codeTd) where
 
 markdownToHtml :: String -> H.Html
 markdownToHtml
-    = writeHtml defaultWriterOptions
-    . readMarkdown defaultParserState
+    = writeHtml def
+    . readMarkdown def
 
 codeTreeToHtml :: Tree Classifier Printable -> H.Html
 codeTreeToHtml = foldTree addSpan H.toHtml . pruneEmptyBranches where
@@ -171,3 +171,11 @@ renderPage css toc mods = renderHtml . H.docTypeHtml $ docHead >> docBody where
         ! A.rel "stylesheet"
         ! A.type_ "text/css"
         ! A.href (fromString css)
+
+-- | Add an class to an element.
+(!.) :: (Attributable h) => h -> H.AttributeValue -> h
+elem !. className = elem ! A.class_ className
+
+-- | Add an id to an element.
+(!#) :: (Attributable h) => h -> H.AttributeValue -> h
+elem !# idName = elem ! A.id idName

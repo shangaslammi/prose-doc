@@ -105,8 +105,6 @@ braces = flip elem
     , RightParen
     , LeftHashParen
     , RightHashParen
-    , LeftCurlyBar
-    , RightCurlyBar
     , LeftCurly
     , RightCurly
     , VRightCurly
