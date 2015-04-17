@@ -19,8 +19,9 @@ import Control.Applicative ((<$>))
 import Control.Monad       ((<=<), filterM, forM)
 import Control.Error
 
-import Data.Monoid (mempty)
-import Data.List   (sort, isPrefixOf)
+import Data.Default (def)
+import Data.Monoid  (mempty)
+import Data.List    (sort, isPrefixOf)
 
 import System.Directory (getDirectoryContents, doesFileExist, doesDirectoryExist)
 import System.FilePath  ((</>), takeExtension, makeRelative)
@@ -52,7 +53,7 @@ is used to embed the style information from an external css file.
 -}
     cssPath <- getDataFileName "css/prose.css"
 
-    makeSelfContained Nothing
+    makeSelfContained def
         $ renderPage cssPath mempty
         $ [moduleToHtml (path, t)]
 
@@ -86,6 +87,6 @@ first.
     let toc = htmlTOC mods
     cssPath <- getDataFileName "css/prose.css"
 
-    makeSelfContained Nothing $ renderPage cssPath toc htmls
+    makeSelfContained def $ renderPage cssPath toc htmls
 
 
