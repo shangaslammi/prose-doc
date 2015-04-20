@@ -33,7 +33,7 @@ library
     , split              >= 0.2
     , blaze-markup       >= 0.6
     , blaze-html         >= 0.7
-    , pandoc             >= 1.12
+    , pandoc             >= 1.13
     , haskell-src-exts   >= 1.15
     , syb                >= 0.3
     , filepath           >= 1.3
